@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="使用python统计一个文件内的单词出现频次，并找出出现频率最高的N个单词">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【python笔记】- 统计文件单词出现频次">
+<meta property="og:url" content="http://yoursite.com/2017/11/08/python-counting/index.html">
+<meta property="og:site_name" content="潇湘往事-Blog">
+<meta property="og:description" content="使用python统计一个文件内的单词出现频次，并找出出现频率最高的N个单词">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-10T03:25:37.434Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【python笔记】- 统计文件单词出现频次">
+<meta name="twitter:description" content="使用python统计一个文件内的单词出现频次，并找出出现频率最高的N个单词">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/08/python-counting/"/>
+
+
+
+
+
+  <title>【python笔记】- 统计文件单词出现频次 | 潇湘往事-Blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc25ff857320d97b4a5ac817b3992810";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">潇湘往事-Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">平凡生活，点点滴滴</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/08/python-counting/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="gongxufan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://avatar.csdn.net/3/7/5/1_qq381332153.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="潇湘往事-Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【python笔记】- 统计文件单词出现频次</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-08T10:45:00+08:00">
+                2017-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/随笔/" itemprop="url" rel="index">
+                    <span itemprop="name">随笔</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/11/08/python-counting/" class="leancloud_visitors" data-flag-title="【python笔记】- 统计文件单词出现频次">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  使用python统计一个文件内的单词出现频次，并找出出现频率最高的N个单词
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>统计一个文件的单词出现次数是分词工具所具备的基本能力，现在尝试使用python进行文件的读取和单词的处理。</p>
+<h2 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h2><p>读取文件在python里简直轻而易举，直接使用open方法就可以拿到文件句柄。同时令人惊叹的是优雅的错误处理和文件关闭策略，基本代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(file, <span class="string">'r'</span>) <span class="keyword">as</span> f:  </span><br><span class="line">            content = f.read()</span><br></pre></td></tr></table></figure></p>
+<p>使用with open as实现了文件的打开和异常处理以及句柄的关闭</p>
+<h2 id="正则分割单词"><a href="#正则分割单词" class="headerlink" title="正则分割单词"></a>正则分割单词</h2><p>这里使用内置的re模块进行正则抽取，这里只是简单的按照\w分词<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#分割单词  </span><br><span class="line"><span class="keyword">for</span> word <span class="keyword">in</span> re.findall(<span class="string">"\w+"</span>, content):</span><br><span class="line">    self.mapping[word] = self.mapping.get(word, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line"><span class="string">``</span><span class="string">` </span></span><br><span class="line"><span class="string">遍历正则结果同时统计单词的次数，这里使用dict的get方法，第一次调用将计数默认置为0</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## 按照出现次数排序</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">使用python的内置函数sorted即可，只需要传入统计结果和key即可进行排序,其原型如下：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">sorted(iterable, cmp=None, key=None, reverse=False)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">- iterable：iteralbe指的是能够一次返回它的一个成员的对象。</span></span><br><span class="line"><span class="string">iterable主要包括3类：</span></span><br><span class="line"><span class="string">    1) 第一类是所有的序列类型，比如list(列表)、str(字符串)、tuple(元组)。 </span></span><br><span class="line"><span class="string">    2) 第二类是一些非序列类型，比如dict(字典)、file(文件)。</span></span><br><span class="line"><span class="string">    3) 第三类是你定义的任何包含__iter__()或__getitem__()方法的类的对象。</span></span><br><span class="line"><span class="string">- cmp：指定一个定制的比较函数，这个函数接收两个参数（iterable的元素），如果第一个参数小于第二个参数，返回一个负数；如果第一个参数等于第二个参数，返回零；如果第一个参数大于第二个参数，返回一个正数。默认值为None。</span></span><br><span class="line"><span class="string">- key：指定一个接收一个参数的函数，这个函数用于从每个元素中提取一个用于比较的关键字。默认值为None。</span></span><br><span class="line"><span class="string">- reverse：是一个布尔值。如果设置为True，列表元素将被降序排列，默认为升序排列。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">通常来说，key和reverse比一个等价的cmp函数处理速度要快。这是因为对于每个列表元素，cmp都会被调用多次，而key和reverse只被调用一次。</span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>javascript</span><br><span class="line"> sorted(self.mapping.items(), key=lambda item: item[<span class="number">1</span>], reverse=True)[:n]</span><br></pre></td></tr></table></figure></p>
+<p>这里调用字典数据类型的items方法获取key和value的元组，然后将元组的第二项作为key传给sorted从而实现按照出现次数进行排序</p>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: UTF-8 -*-  </span><br><span class="line"><span class="keyword">import</span> collections  </span><br><span class="line"><span class="keyword">import</span> re  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">class Counter:  </span><br><span class="line">    <span class="string">'读取文本文件，并统计每个单词的出现频次'</span>  </span><br><span class="line">  </span><br><span class="line">    def __init__(self, file):  </span><br><span class="line">        self.mapping = &#123;&#125;  </span><br><span class="line">        <span class="keyword">with</span> open(file, <span class="string">'r'</span>) <span class="keyword">as</span> f:  </span><br><span class="line">            content = f.read()  </span><br><span class="line">            # 分割单词  </span><br><span class="line">            <span class="keyword">for</span> word <span class="keyword">in</span> re.findall(<span class="string">"\w+"</span>, content):  </span><br><span class="line">                self.mapping[word] = self.mapping.get(word, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line">  </span><br><span class="line">    def most_repeated(self, n):  </span><br><span class="line">        <span class="keyword">return</span> sorted(self.mapping.items(), key=lambda item: item[<span class="number">1</span>], reverse=True)[:n]  </span><br><span class="line">        # return collections.Counter(self.mapping).most_common(5)  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">if</span> <span class="string">'__main__'</span> == __name__:  </span><br><span class="line">    counter = Counter(<span class="string">"/home/gongxufan/.m2/settings.xml"</span>)  </span><br><span class="line">    print counter.most_repeated(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Counter在构造方法中读取文件然后使用正则分割单词存到序列中，遍历的时候统计单词出现次数。这里使用了dict的get(key,defaultValue)方法，第一次出现设置初始值为0。最后在统计排名的时候使用sorted内置函数。其实这字典值的统计排名可以使用内置的collections模块进行操作，而且其实现更加高效和可靠。</p>
+<p>比如most_common方法：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def most_common(self, n=None):  </span><br><span class="line">    <span class="string">''</span><span class="string">''</span><span class="string">'List the n most common elements and their counts from the most </span></span><br><span class="line"><span class="string">    common to the least.  If n is None, then list all element counts. </span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; Counter('</span>abcdeabcdabcaba<span class="string">').most_common(3) </span></span><br><span class="line"><span class="string">    [('</span>a<span class="string">', 5), ('</span>b<span class="string">', 4), ('</span>c<span class="string">', 3)] </span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">    '</span><span class="string">''</span>  </span><br><span class="line">    # Emulate Bag.sortedByCount from Smalltalk  </span><br><span class="line">    <span class="keyword">if</span> n is None:  </span><br><span class="line">        <span class="keyword">return</span> sorted(self.iteritems(), key=_itemgetter(<span class="number">1</span>), reverse=True)  </span><br><span class="line">    <span class="keyword">return</span> _heapq.nlargest(n, self.iteritems(), key=_itemgetter(<span class="number">1</span>))</span><br></pre></td></tr></table></figure></p>
+<p>对指定的长度进行统计会针对各种情况进行优化处理：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">def nlargest(n, iterable, key=None):  </span><br><span class="line">    <span class="string">""</span><span class="string">"Find the n largest elements in a dataset. </span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">    Equivalent to:  sorted(iterable, key=key, reverse=True)[:n] </span></span><br><span class="line"><span class="string">    "</span><span class="string">""</span>  </span><br><span class="line">  </span><br><span class="line">    # Short-cut for n==1 is to use max() when len(iterable)&gt;0  </span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">1</span>:  </span><br><span class="line">        it = iter(iterable)  </span><br><span class="line">        head = list(islice(it, <span class="number">1</span>))  </span><br><span class="line">        <span class="keyword">if</span> not head:  </span><br><span class="line">            <span class="keyword">return</span> []  </span><br><span class="line">        <span class="keyword">if</span> key is None:  </span><br><span class="line">            <span class="keyword">return</span> [max(chain(head, it))]  </span><br><span class="line">        <span class="keyword">return</span> [max(chain(head, it), key=key)]  </span><br><span class="line">  </span><br><span class="line">    # When n&gt;=size, it's faster to use sorted()  </span><br><span class="line">    <span class="keyword">try</span>:  </span><br><span class="line">        size = len(iterable)  </span><br><span class="line">    except (<span class="built_in">TypeError</span>, AttributeError):  </span><br><span class="line">        pass  </span><br><span class="line">    <span class="keyword">else</span>:  </span><br><span class="line">        <span class="keyword">if</span> n &gt;= size:  </span><br><span class="line">            <span class="keyword">return</span> sorted(iterable, key=key, reverse=True)[:n]  </span><br><span class="line">  </span><br><span class="line">    # When key is none, use simpler decoration  </span><br><span class="line">    <span class="keyword">if</span> key is None:  </span><br><span class="line">        it = izip(iterable, count(0,-1))                    # decorate  </span><br><span class="line">        result = _nlargest(n, it)  </span><br><span class="line">        return map(itemgetter(0), result)                   # undecorate  </span><br><span class="line">  </span><br><span class="line">    # General case, slowest method  </span><br><span class="line">    in1, in2 = tee(iterable)  </span><br><span class="line">    it = izip(imap(key, in1), count(0,-1), in2)             # decorate  </span><br><span class="line">    result = _nlargest(n, it)  </span><br><span class="line">    return map(itemgetter(2), result)                       # undecorate</span><br></pre></td></tr></table></figure>
+<p>python就是一门这么简洁优雅的开发工具，以前我比较抗拒这种动态语言，喜欢结构化和oop的开发模式，现在是越发欢这门语言了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/06/weixin-manager-system/" rel="next" title="微信.公众平台开发模式配置管理系统">
+                <i class="fa fa-chevron-left"></i> 微信.公众平台开发模式配置管理系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://avatar.csdn.net/3/7/5/1_qq381332153.jpg"
+                alt="gongxufan" />
+            
+              <p class="site-author-name" itemprop="name">gongxufan</p>
+              <p class="site-description motion-element" itemprop="description">技术分享,Java</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读取文件"><span class="nav-number">2.</span> <span class="nav-text">读取文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正则分割单词"><span class="nav-number">3.</span> <span class="nav-text">正则分割单词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整代码"><span class="nav-number">4.</span> <span class="nav-text">完整代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">gongxufan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("7Do3qJ6mAHsHtIzkulIOEglT-gzGzoHsz", "yCDRrJqGuDMB81YS6w0x7ugP");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
