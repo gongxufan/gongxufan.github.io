@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="javascript," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="树的数据结构数组表示，一种是带pid形式的一维数组，另一种为带子节点的数组表示。">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript树形结构的数组表示和转换">
+<meta property="og:url" content="https://gongxufan.github.io/2016/12/08/javascript-tree-data/index.html">
+<meta property="og:site_name" content="潇湘往事-Blog">
+<meta property="og:description" content="树的数据结构数组表示，一种是带pid形式的一维数组，另一种为带子节点的数组表示。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/javascript-tree-data/result.png">
+<meta property="og:updated_time" content="2017-11-10T09:54:27.600Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript树形结构的数组表示和转换">
+<meta name="twitter:description" content="树的数据结构数组表示，一种是带pid形式的一维数组，另一种为带子节点的数组表示。">
+<meta name="twitter:image" content="https://gongxufan.github.io/upload/images/javascript-tree-data/result.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://gongxufan.github.io/2016/12/08/javascript-tree-data/"/>
+
+
+
+
+
+  <title>Javascript树形结构的数组表示和转换 | 潇湘往事-Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">潇湘往事-Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">平凡生活，点点滴滴</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            站内搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://gongxufan.github.io/2016/12/08/javascript-tree-data/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="gongxufan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avator.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="潇湘往事-Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Javascript树形结构的数组表示和转换</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-08T17:05:00+08:00">
+                2016-12-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/随笔/" itemprop="url" rel="index">
+                    <span itemprop="name">随笔</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2016/12/08/javascript-tree-data/" class="leancloud_visitors" data-flag-title="Javascript树形结构的数组表示和转换">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  树的数据结构数组表示，一种是带pid形式的一维数组，另一种为带子节点的数组表示。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在做微信公众号开发的时候，对自定义菜单进行管理就涉及到父子菜单的操作。我们在数据中一般保存为(id,pid,…)这样的平级结构，而在调用微信接口的时候一般是一个层级的数组结构，我们可以用JS进行转换。</p>
+<h2 id="数组降级"><a href="#数组降级" class="headerlink" title="数组降级"></a>数组降级</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将一个层次的数据结构，转换为平行的父子数据结构</span></span><br><span class="line"><span class="comment"> * @param nodesArray</span></span><br><span class="line"><span class="comment"> * @returns &#123;*&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">array2Nodes</span>(<span class="params">nodesArray</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> i, l,</span><br><span class="line">        key = <span class="string">"id"</span>,</span><br><span class="line">        parentKey = <span class="string">"pId"</span>,</span><br><span class="line">        childKey = <span class="string">"sub_button"</span>;</span><br><span class="line">    <span class="keyword">if</span> (!key || key == <span class="string">""</span> || !nodesArray) <span class="keyword">return</span> [];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nodesArray <span class="keyword">instanceof</span> <span class="built_in">Array</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> r = [];</span><br><span class="line">        <span class="keyword">var</span> tmpMap = &#123;&#125;;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>, l = nodesArray.length; i &lt; l; i++) &#123;</span><br><span class="line">            tmpMap[nodesArray[i][key]] = nodesArray[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>, l = nodesArray.length; i &lt; l; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (tmpMap[nodesArray[i][parentKey]] &amp;&amp; nodesArray[i][key] != nodesArray[i][parentKey]) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!tmpMap[nodesArray[i][parentKey]][childKey])</span><br><span class="line">                    tmpMap[nodesArray[i][parentKey]][childKey] = [];</span><br><span class="line">                tmpMap[nodesArray[i][parentKey]][childKey].push(nodesArray[i]);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                r.push(nodesArray[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> r;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> [nodesArray];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>array2Nodes将带有子节点的数据展开，变成平级的一维数组</p>
+<h2 id="维度提升"><a href="#维度提升" class="headerlink" title="维度提升"></a>维度提升</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将平行父子数据结构转为层次结构</span></span><br><span class="line"><span class="comment"> * @param nodes</span></span><br><span class="line"><span class="comment"> * @returns &#123;Array&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">nodes2Array</span>(<span class="params">nodes</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!nodes) <span class="keyword">return</span> [];</span><br><span class="line">    <span class="keyword">var</span> childKey = <span class="string">"sub_button"</span>,</span><br><span class="line">        r = [];</span><br><span class="line">    <span class="keyword">if</span> (nodes <span class="keyword">instanceof</span> <span class="built_in">Array</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, l = nodes.length; i &lt; l; i++) &#123;</span><br><span class="line">            r.push(nodes[i]);</span><br><span class="line">            <span class="keyword">if</span> (nodes[i][childKey])</span><br><span class="line">                r = r.concat(nodes2Array(nodes[i][childKey]));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        r.push(nodes);</span><br><span class="line">        <span class="keyword">if</span> (nodes[childKey])</span><br><span class="line">            r = r.concat(nodes2Array(nodes[childKey]));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> r;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>nodes2Array按照指定的key生成自包含的数组，这里是微信的sub_button(其他场景可以自定义key)。</p>
+<p>##　测试<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> menuArray = [&#123;</span><br><span class="line">    <span class="string">"id"</span>: <span class="string">"AE9CB92989FFB1523D8C63C3124AB372F074F8898BE7B930FABCE06BF60CB237"</span>,</span><br><span class="line">    <span class="string">"pId"</span>: <span class="string">"-1"</span>,</span><br><span class="line">    <span class="string">"key"</span>: <span class="string">"4C0F11D31571F75A00F620C82E5847E89837FDD758C5027E4D1DDFE959697F85"</span>,</span><br><span class="line">    <span class="string">"url"</span>: <span class="string">"http://"</span>,</span><br><span class="line">    <span class="string">"media_id"</span>: <span class="string">"null"</span>,</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"菜单名称"</span>,</span><br><span class="line">    <span class="string">"type"</span>: <span class="string">"view"</span>,</span><br><span class="line">    <span class="string">"orderId"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">"msgText"</span>: <span class="string">"null"</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">    <span class="string">"id"</span>: <span class="string">"FD5C1B24A580DB7DE7F472736B7A06277FE8C17BB8739F9D3BE2B19D866C8470"</span>,</span><br><span class="line">    <span class="string">"pId"</span>: <span class="string">"-1"</span>,</span><br><span class="line">    <span class="string">"key"</span>: <span class="string">"909CE8ADA256BEEE2E37A78C0CDD823B273B04C60F797A537EC174A0377D7B8C"</span>,</span><br><span class="line">    <span class="string">"url"</span>: <span class="string">"null"</span>,</span><br><span class="line">    <span class="string">"media_id"</span>: <span class="string">"null"</span>,</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"菜单名称"</span>,</span><br><span class="line">    <span class="string">"type"</span>: <span class="string">"click"</span>,</span><br><span class="line">    <span class="string">"orderId"</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">"msgText"</span>: <span class="string">"null"</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">    <span class="string">"id"</span>: <span class="string">"324703D728232820DE9A8305D183B3289AE708DBBF4B8F4D044F7BC9714B7F80"</span>,</span><br><span class="line">    <span class="string">"pId"</span>: <span class="string">"FD5C1B24A580DB7DE7F472736B7A06277FE8C17BB8739F9D3BE2B19D866C8470"</span>,</span><br><span class="line">    <span class="string">"key"</span>: <span class="string">"C9B73D24A5EAD91772CFEC5BD129B7EB2C2A9A96E3EF743BAF54B53E29758837"</span>,</span><br><span class="line">    <span class="string">"url"</span>: <span class="string">"null"</span>,</span><br><span class="line">    <span class="string">"media_id"</span>: <span class="string">"null"</span>,</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"菜单名称"</span>,</span><br><span class="line">    <span class="string">"type"</span>: <span class="string">"click"</span>,</span><br><span class="line">    <span class="string">"orderId"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">"msgText"</span>: <span class="string">"null"</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">    <span class="string">"id"</span>: <span class="string">"00DB54295F5A87248BEE3B7160C217066A6CE77C00B9EC2A415CE15898390425"</span>,</span><br><span class="line">    <span class="string">"pId"</span>: <span class="string">"AE9CB92989FFB1523D8C63C3124AB372F074F8898BE7B930FABCE06BF60CB237"</span>,</span><br><span class="line">    <span class="string">"key"</span>: <span class="string">"05810B96BBDC28AAB99EBC69E70F9196C42434A042C0468F6A8DDB0875D22972"</span>,</span><br><span class="line">    <span class="string">"url"</span>: <span class="string">"null"</span>,</span><br><span class="line">    <span class="string">"media_id"</span>: <span class="string">"null"</span>,</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"菜单名称"</span>,</span><br><span class="line">    <span class="string">"type"</span>: <span class="string">"click"</span>,</span><br><span class="line">    <span class="string">"orderId"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">"msgText"</span>: <span class="string">"null"</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">    <span class="string">"id"</span>: <span class="string">"547B7E126D694B4DC9B831951B3F5A2A378ED4AA0DA9955C088A076F865BC1B1"</span>,</span><br><span class="line">    <span class="string">"pId"</span>: <span class="string">"AE9CB92989FFB1523D8C63C3124AB372F074F8898BE7B930FABCE06BF60CB237"</span>,</span><br><span class="line">    <span class="string">"key"</span>: <span class="string">"4EA0242BE5E66E90FB7931B804472DE68CE17D46817CD699F38E21903B1DEAE6"</span>,</span><br><span class="line">    <span class="string">"url"</span>: <span class="string">"null"</span>,</span><br><span class="line">    <span class="string">"media_id"</span>: <span class="string">"null"</span>,</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"菜单名称"</span>,</span><br><span class="line">    <span class="string">"type"</span>: <span class="string">"click"</span>,</span><br><span class="line">    <span class="string">"orderId"</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">"msgText"</span>: <span class="string">"null"</span></span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> nodes = array2Nodes(menuArray);</span><br><span class="line"><span class="built_in">console</span>.log(array2Nodes(nodes));</span><br><span class="line"><span class="built_in">console</span>.log(nodes2Array(nodes));</span><br></pre></td></tr></table></figure></p>
+<p>在控制台的输出如下：<br><img src="/upload/images/javascript-tree-data/result.png" alt="img"></p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>在后台管理系统中树的操作是很频繁的，一般在后台查询采用递归，而这样往往逻辑复杂不易维护。比如要展示一颗部门的树，我们先定义个Unit类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by gongxufan on 2017/3/13.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name=<span class="string">"tcUnit"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Unit</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span>(strategy = GenerationType.TABLE, generator = <span class="string">"tableKeyGenerator"</span>)</span><br><span class="line">    <span class="meta">@TableGenerator</span>(name = <span class="string">"tableKeyGenerator"</span>, table = <span class="string">"tcTableKeyGenerator"</span>,</span><br><span class="line">            pkColumnName = <span class="string">"pk_key"</span>, valueColumnName = <span class="string">"pk_value"</span>, pkColumnValue = <span class="string">"unitID"</span>,</span><br><span class="line">            initialValue = <span class="number">1</span>, allocationSize = <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">private</span> Integer unitID;</span><br><span class="line">    <span class="keyword">private</span> Integer seniorUnitID;</span><br><span class="line">    <span class="keyword">private</span> String unitName;</span><br><span class="line">    <span class="keyword">private</span> String description;</span><br><span class="line">    <span class="keyword">private</span> Integer displayOrder;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getUnitID</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> unitID;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUnitID</span><span class="params">(Integer unitID)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.unitID = unitID;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getSeniorUnitID</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> seniorUnitID;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSeniorUnitID</span><span class="params">(Integer seniorUnitID)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.seniorUnitID = seniorUnitID;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUnitName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> unitName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUnitName</span><span class="params">(String unitName)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.unitName = unitName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDescription</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> description;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDescription</span><span class="params">(String description)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.description = description;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getDisplayOrder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> displayOrder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDisplayOrder</span><span class="params">(Integer displayOrder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.displayOrder = displayOrder;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>里边的注解大可不必在意，那是spring-data-jpa的一些注解。这是经典的自包含结构，一个unitID再来一个 seniorUnitID在指向父节点。这个是业务节点，然后咱们定义一个easyUI树所需的节点数据结构。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="keyword">private</span> String  pId;</span><br><span class="line">    <span class="keyword">private</span> String text;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> checked;</span><br><span class="line">    <span class="keyword">private</span> String state;</span><br><span class="line">    <span class="keyword">private</span> String iconCls;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> type;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Map&lt;String,Object&gt; attributes;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String, Object&gt; <span class="title">getAttributes</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> attributes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAttributes</span><span class="params">(Map&lt;String, Object&gt; attributes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.attributes = attributes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setType</span><span class="params">(<span class="keyword">int</span> type)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.type = type;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(String id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getpId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> pId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setpId</span><span class="params">(String pId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.pId = pId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> type;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getText</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> text;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setText</span><span class="params">(String text)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.text = text;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isChecked</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> checked;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setChecked</span><span class="params">(<span class="keyword">boolean</span> checked)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.checked = checked;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(String state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getIconCls</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> iconCls;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setIconCls</span><span class="params">(String iconCls)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.iconCls = iconCls;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>里边包含id,pId以及树节点的基本信息，显然前端展示所需的数据需要从Unit结构进行一次转换。现在我们需要展示所有单位的树形结构，那么我们只需要查询所有的Unit记录保存到List，然后将这个List转换为TreeNode类型即可：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(value = <span class="string">"/unit/getUnitTree"</span>,method = RequestMethod.POST)</span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">getUnitTree</span><span class="params">(Integer humanId,Integer fetchHumans, Integer fetchWhole,HttpServletRequest request)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(humanId == <span class="keyword">null</span>)&#123;</span><br><span class="line">        humanId = EgovaWebUtil.getHumanInSession(request).getHumanID();</span><br><span class="line">    &#125;</span><br><span class="line">    List&lt;TreeNode&gt; treeNodes = <span class="keyword">new</span> ArrayList&lt;TreeNode&gt;();</span><br><span class="line">    ResultDto&lt;List&lt;Unit&gt;&gt; resultDto =  humanAction.getHumanUnitTree(humanId,fetchWhole);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(ApiInvokeUtil.validateAPiInvoke(resultDto))&#123;</span><br><span class="line">        List&lt;Unit&gt; unitList = resultDto.getData();</span><br><span class="line">        <span class="comment">//将单位列表转换为easyUI树形结构所需的格式</span></span><br><span class="line">        <span class="keyword">if</span>(unitList != <span class="keyword">null</span> &amp;&amp; unitList.size() &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; unitList.size();i++)&#123;</span><br><span class="line">                TreeNode treeNode = <span class="keyword">new</span> TreeNode();</span><br><span class="line">                Unit unit = unitList.get(i);</span><br><span class="line">                treeNode.setText(unit.getUnitName());</span><br><span class="line">                treeNode.setChecked(<span class="keyword">false</span>);</span><br><span class="line">                treeNode.setId(<span class="string">"unit:"</span> + unit.getUnitID());</span><br><span class="line">                treeNode.setIconCls(TreeNodeConst.NODE_ICON_UNIT);</span><br><span class="line">                treeNode.setType(TreeNodeConst.NODE_TYPE_UNIT);</span><br><span class="line">                treeNode.setState(<span class="string">"open"</span>);</span><br><span class="line">                treeNode.setpId(<span class="string">"unit:"</span> + unit.getSeniorUnitID());</span><br><span class="line">                Map&lt;String,Object&gt; attrs = ObjectUtil.Object2Map(unit);</span><br><span class="line">                attrs.put(<span class="string">"nodeType"</span>,TreeNodeConst.NODE_TYPE_UNIT);</span><br><span class="line">                treeNode.setAttributes(attrs);</span><br><span class="line">                treeNodes.add(treeNode);</span><br><span class="line">                <span class="comment">//查询单位下的人员</span></span><br><span class="line">                <span class="keyword">if</span>(fetchHumans == <span class="keyword">null</span>)</span><br><span class="line">                    dealHumansInUnit(unit,treeNodes);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> resultDto;</span><br><span class="line">    &#125;</span><br><span class="line">    ResultDto&lt;List&lt;TreeNode&gt;&gt; treeNodesDTO = <span class="keyword">new</span> ResultDto&lt;List&lt;TreeNode&gt;&gt;();</span><br><span class="line">    treeNodesDTO.setData(treeNodes);</span><br><span class="line">    treeNodesDTO.setCode(ErrorCode.OK.getCode());</span><br><span class="line">    treeNodesDTO.setDesc(ErrorCode.OK.getDesc());</span><br><span class="line">    <span class="keyword">return</span> treeNodesDTO;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里是springmvc的控制器的业务处理逻辑了，这里包含对单位下人员的子节点的构造。不管里面的业务，最终目的就是生成树节点的一个List结构。</p>
+<p>后台就干这么个事儿，不用去递归生成一个TreeNode(TreeNode parent)这样的自包含数据。递归结构交给Js去做，前端只需用array2Nodes函数进行转换即可：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">$.post(BASEPATH + <span class="string">'/config/unit/getUnitTree'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">if</span>(common.dealResponse(response))&#123;</span><br><span class="line">              <span class="comment">//转换List为树形结构</span></span><br><span class="line">              <span class="keyword">var</span> nodes = common.array2Nodes(response.data);</span><br><span class="line">              <span class="comment">//加载部门树</span></span><br><span class="line">              $(<span class="string">'#unit-tree'</span>).tree(&#123;</span><br><span class="line">                  data : nodes,</span><br><span class="line">                  onClick : <span class="function"><span class="keyword">function</span>(<span class="params">node</span>)</span>&#123;</span><br><span class="line">                      <span class="comment">//获取节点对应的目录属性信息</span></span><br><span class="line">                      <span class="keyword">var</span> attributes = node.attributes;</span><br><span class="line">                      <span class="keyword">if</span> (attributes) &#123;</span><br><span class="line">                          <span class="comment">//根据单位节点和人员节点显示不同的面板</span></span><br><span class="line">                          <span class="keyword">if</span>(attributes.nodeType == common.constant.NODE_TYPE_UNIT)&#123;</span><br><span class="line">                              $(<span class="string">"#unitPanel"</span>).show();</span><br><span class="line">                              $(<span class="string">"#humanPanel"</span>).hide();</span><br><span class="line">                              $(<span class="string">"#unitForm"</span>).form(<span class="string">'load'</span>,attributes);</span><br><span class="line">                          &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                              $(<span class="string">"#humanPanel"</span>).show();</span><br><span class="line">                              $(<span class="string">"#unitPanel"</span>).hide();</span><br><span class="line">                              $(<span class="string">"#humanForm"</span>).form(<span class="string">'load'</span>,attributes);</span><br><span class="line">                          &#125;</span><br><span class="line">                      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                          $(<span class="string">"#unitPanel"</span>).hide();</span><br><span class="line">                          $(<span class="string">"#humanPanel"</span>).hide();</span><br><span class="line">                      &#125;</span><br><span class="line">                  &#125;,</span><br><span class="line">                  onLoadSuccess: <span class="function"><span class="keyword">function</span> (<span class="params">node</span>) </span>&#123;</span><br><span class="line">                      <span class="keyword">var</span> $tree = $(<span class="keyword">this</span>);</span><br><span class="line">                      <span class="keyword">var</span> root = $tree.tree(<span class="string">'getRoot'</span>);</span><br><span class="line">                      <span class="keyword">var</span> treeNodes = $tree.tree(<span class="string">'getChildren'</span>);</span><br><span class="line">                      <span class="keyword">var</span> root = treeNodes[<span class="number">0</span>];</span><br><span class="line">                      $(root.target).trigger(<span class="string">'click'</span>);</span><br><span class="line">                      <span class="comment">// 展开该节点</span></span><br><span class="line">                      $tree.tree(<span class="string">'expand'</span>, root.target);</span><br><span class="line">                  &#125;</span><br><span class="line">              &#125;);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;);</span><br></pre></td></tr></table></figure></p>
+<h2 id="end"><a href="#end" class="headerlink" title="end"></a>end</h2><p>在如今js大前端大行其道加之客户端浏览器性能得到改善的情况，把一些计算任务交给客户端，能减少服务端的访问压力。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/upload/images/wechatpay.jpeg" alt="gongxufan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/upload/images/alipay.jpeg" alt="gongxufan 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    gongxufan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://gongxufan.github.io/2016/12/08/javascript-tree-data/" title="Javascript树形结构的数组表示和转换">https://gongxufan.github.io/2016/12/08/javascript-tree-data/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/07/topology-editor/" rel="next" title="基于Jtopo的网络拓扑编辑器初探">
+                <i class="fa fa-chevron-left"></i> 基于Jtopo的网络拓扑编辑器初探
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/23/easyui-search-commbox/" rel="prev" title="easyUI实现类似搜索框关键词自动提示功能">
+                easyUI实现类似搜索框关键词自动提示功能 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div style="margin-top: 20px;text-align: center;">
+      
+        <!--MOB SHARE BEGIN-->
+<div class="-mob-share-ui-button -mob-share-open">分享本文</div>
+<div class="-mob-share-ui" style="display: none">
+    <ul class="-mob-share-list">
+        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+        <li class="-mob-share-qq"><p>QQ好友</p></li>
+        <li class="-mob-share-douban"><p>豆瓣</p></li>
+        <li class="-mob-share-facebook"><p>Facebook</p></li>
+        <li class="-mob-share-twitter"><p>Twitter</p></li>
+    </ul>
+    <div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<script id="-mob-share" src="https://f1.webshare.mob.com/code/mob-share.js?appkey=你的appkey"></script>
+<!--MOB SHARE END-->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://www.intensedebate.com?ref_noscript">comments powered by intensedebate.</a>
+        </noscript>
+        <script>
+              var idcomments_acct = '5f980fb685d9eca708e4ec93983b3255';
+              var idcomments_post_id;
+              var idcomments_post_url;
+          </script>
+          <span id="IDCommentsPostTitle" style="display:none"></span>
+          <script type='text/javascript' src='https://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+      </div>
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/upload/avator.jpg"
+                alt="gongxufan" />
+            
+              <p class="site-author-name" itemprop="name">gongxufan</p>
+              <p class="site-description motion-element" itemprop="description">技术分享</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数组降级"><span class="nav-number">1.</span> <span class="nav-text">数组降级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#维度提升"><span class="nav-number">2.</span> <span class="nav-text">维度提升</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用"><span class="nav-number">3.</span> <span class="nav-text">应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#end"><span class="nav-number">4.</span> <span class="nav-text">end</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">gongxufan</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('5');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("7Do3qJ6mAHsHtIzkulIOEglT-gzGzoHsz", "yCDRrJqGuDMB81YS6w0x7ugP");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
