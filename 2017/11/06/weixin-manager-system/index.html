@@ -87,16 +87,16 @@
 <meta property="og:site_name" content="潇湘往事-Blog">
 <meta property="og:description" content="仿微信官方公众号后台管理系统,实现公众号的菜单管理、用户管理、消息管理、素材管理、消息群发，自动回复等基本功能">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2017/11/06/weixin-manager-system/!--￼5--%3E/images/weixin-manager/main-func.png">
-<meta property="og:image" content="http://yoursite.com/2017/11/06/weixin-manager-system/!--￼6--%3E/images/weixin-manager/menu-manage.png">
-<meta property="og:image" content="http://yoursite.com/2017/11/06/weixin-manager-system/!--￼7--%3E/images/weixin-manager/muti-message.png">
-<meta property="og:image" content="http://yoursite.com/2017/11/06/weixin-manager-system/!--￼8--%3E/images/weixin-manager/muti-message-mg.png">
-<meta property="og:image" content="http://yoursite.com/2017/11/06/weixin-manager-system/!--￼9--%3E/images/weixin-manager/auto-reply.png">
-<meta property="og:updated_time" content="2017-11-10T03:25:37.494Z">
+<meta property="og:image" content="http://yoursite.com/upload/images/weixin-manager/main-func.png">
+<meta property="og:image" content="http://yoursite.com/upload/images/weixin-manager/menu-manage.png">
+<meta property="og:image" content="http://yoursite.com/upload/images/weixin-manager/muti-message.png">
+<meta property="og:image" content="http://yoursite.com/upload/images/weixin-manager/muti-message-mg.png">
+<meta property="og:image" content="http://yoursite.com/upload/images/weixin-manager/auto-reply.png">
+<meta property="og:updated_time" content="2017-11-10T05:02:31.402Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信.公众平台开发模式配置管理系统">
 <meta name="twitter:description" content="仿微信官方公众号后台管理系统,实现公众号的菜单管理、用户管理、消息管理、素材管理、消息群发，自动回复等基本功能">
-<meta name="twitter:image" content="http://yoursite.com/2017/11/06/weixin-manager-system/!--￼5--%3E/images/weixin-manager/main-func.png">
+<meta name="twitter:image" content="http://yoursite.com/upload/images/weixin-manager/main-func.png">
 
 
 
@@ -207,16 +207,6 @@
         </li>
       
         
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
@@ -258,9 +248,43 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
   
 </nav>
 
@@ -354,6 +378,17 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/06/weixin-manager-system/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/06/weixin-manager-system/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -401,7 +436,7 @@
 <h2 id="集成微信SDK"><a href="#集成微信SDK" class="headerlink" title="集成微信SDK"></a>集成微信SDK</h2><p>通过添加过滤器的方式集成jfinal的微信sdk,具体在<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//启动JFinal微信</span></span><br><span class="line">FilterRegistration.Dynamic wxFilter = servletContext.addFilter(<span class="string">"handler"</span>, JFinalFilter.class);</span><br><span class="line">wxFilter.addMappingForUrlPatterns(<span class="keyword">null</span>, <span class="keyword">false</span>, <span class="string">"/weixin/*"</span>);</span><br><span class="line">params = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">params.put(<span class="string">"configClass"</span>, <span class="string">"cn.com.egova.wx.config.wx.WeixinConfig"</span>);</span><br><span class="line">wxFilter.setInitParameters(params);</span><br></pre></td></tr></table></figure></p>
 <p>此处对/weixin/开头的请求进行拦截，并配置了参数类WeixinConfig,其代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.com.egova.wx.config.wx;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 微信公众号相关配置</span></span><br><span class="line"><span class="comment"> * Created by gongxufan on 2016/8/2.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.com.egova.wx.web.handler.WeixinApiInvokeHandler;</span><br><span class="line"><span class="keyword">import</span> cn.com.egova.wx.web.handler.WeixinMsgMonitorHandler;</span><br><span class="line"><span class="keyword">import</span> cn.com.egova.wx.sdk.api.ApiConfigKit;</span><br><span class="line"><span class="keyword">import</span> com.jfinal.config.Constants;</span><br><span class="line"><span class="keyword">import</span> com.jfinal.config.Handlers;</span><br><span class="line"><span class="keyword">import</span> com.jfinal.config.Interceptors;</span><br><span class="line"><span class="keyword">import</span> com.jfinal.config.JFinalConfig;</span><br><span class="line"><span class="keyword">import</span> com.jfinal.config.Plugins;</span><br><span class="line"><span class="keyword">import</span> com.jfinal.config.Routes;</span><br><span class="line"><span class="keyword">import</span> com.jfinal.kit.PropKit;</span><br><span class="line"><span class="keyword">import</span> com.jfinal.render.ViewType;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeixinConfig</span> <span class="keyword">extends</span> <span class="title">JFinalConfig</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 如果生产环境配置文件存在，则优先加载该配置，否则加载开发环境配置文件</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> pro 生产环境配置文件</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> dev 开发环境配置文件</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadProp</span><span class="params">(String pro, String dev)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            PropKit.use(pro);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            PropKit.use(dev);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configConstant</span><span class="params">(Constants me)</span> </span>&#123;</span><br><span class="line">        loadProp(<span class="string">"/sysinfo.properties"</span>, <span class="string">"/sysinfo.properties"</span>);</span><br><span class="line">        me.setDevMode(PropKit.getBoolean(<span class="string">"devMode"</span>, <span class="keyword">false</span>));</span><br><span class="line">        me.setEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">        me.setViewType(ViewType.JSP);</span><br><span class="line">        me.setError500View(<span class="string">"/500.html"</span>);</span><br><span class="line">        me.setError404View(<span class="string">"/404.html"</span>);</span><br><span class="line">        <span class="comment">// ApiConfigKit 设为开发模式可以在开发阶段输出请求交互的 xml 与 json 数据</span></span><br><span class="line">        ApiConfigKit.setDevMode(me.getDevMode());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configRoute</span><span class="params">(Routes me)</span> </span>&#123;</span><br><span class="line">        me.add(<span class="string">"/weixin/msg"</span>, WeixinMsgMonitorHandler.class,<span class="string">"/"</span>);</span><br><span class="line">        me.add(<span class="string">"/weixin/api"</span>, WeixinApiInvokeHandler.class,<span class="string">"/"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configPlugin</span><span class="params">(Plugins me)</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configInterceptor</span><span class="params">(Interceptors me)</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configHandler</span><span class="params">(Handlers me)</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>在这里配置msg和api的处理器，分别是处理微信消息和微信api调用的处理逻辑</p>
-<h2 id="系统主要功能界面"><a href="#系统主要功能界面" class="headerlink" title="系统主要功能界面"></a>系统主要功能界面</h2><p><img src="!--￼5--&gt;/images/weixin-manager/main-func.png" alt="img">{: .center-image }<br>自定义菜单还是实现了跟官方一样的菜单排序，菜单的的图文消息编辑等<br><img src="!--￼6--&gt;/images/weixin-manager/menu-manage.png" alt="img">{: .center-image }<br>素材管理实现图文消息的编辑和新建，图片的管理和查看<br><img src="!--￼7--&gt;/images/weixin-manager/muti-message.png" alt="img">{: .center-image }<br><img src="!--￼8--&gt;/images/weixin-manager/muti-message-mg.png" alt="img">{: .center-image }<br>可以设置自动回复和消息群发<br><img src="!--￼9--&gt;/images/weixin-manager/auto-reply.png" alt="img">{: .center-image }<br>其他功能就不在此赘述，附上项目地址：<a href="https://github.com/gongxufan/wechat-conf/" target="_blank" rel="external">https://github.com/gongxufan/wechat-conf/</a></p>
+<h2 id="系统主要功能界面"><a href="#系统主要功能界面" class="headerlink" title="系统主要功能界面"></a>系统主要功能界面</h2><p><img src="/upload/images/weixin-manager/main-func.png" alt="img"><br>自定义菜单还是实现了跟官方一样的菜单排序，菜单的的图文消息编辑等<br><img src="/upload/images/weixin-manager/menu-manage.png" alt="img"><br>素材管理实现图文消息的编辑和新建，图片的管理和查看<br><img src="/upload/images/weixin-manager/muti-message.png" alt="img"><br><img src="/upload/images/weixin-manager/muti-message-mg.png" alt="img"><br>可以设置自动回复和消息群发<br><img src="/upload/images/weixin-manager/auto-reply.png" alt="img"><br>其他功能就不在此赘述，附上项目地址：<a href="https://github.com/gongxufan/wechat-conf/" target="_blank" rel="external">https://github.com/gongxufan/wechat-conf/</a></p>
 <blockquote>
 <p>版权声明：本文为博主原创文章，未经博主允许不得转载。本博客地址：<a href="https://gongxufan.github.io" target="_blank" rel="external">https://gongxufan.github.io</a></p>
 </blockquote>
@@ -477,6 +512,23 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+        <script>
+              var idcomments_acct = '5f980fb685d9eca708e4ec93983b3255';
+              var idcomments_post_id;
+              var idcomments_post_url;
+          </script>
+          <span id="IDCommentsPostTitle" style="display:none"></span>
+          <script type='text/javascript' src='https://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+      </div>
+    </div>
 
   
 
@@ -750,6 +802,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://disqus.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/11/06/weixin-manager-system/';
+          this.page.identifier = '2017/11/06/weixin-manager-system/';
+          this.page.title = '微信.公众平台开发模式配置管理系统';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://disqus.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -765,10 +837,6 @@
 
 
 
-  
-
-
-
 
 
 
@@ -781,6 +849,323 @@
 
 
   
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
 
 
 
