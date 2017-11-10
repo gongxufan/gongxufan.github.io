@@ -83,11 +83,11 @@
 <meta name="keywords" content="python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【python笔记】- 统计文件单词出现频次">
-<meta property="og:url" content="http://yoursite.com/2017/11/08/python-counting/index.html">
+<meta property="og:url" content="https://gongxufan.github.io/2017/11/08/python-counting/index.html">
 <meta property="og:site_name" content="潇湘往事-Blog">
 <meta property="og:description" content="使用python统计一个文件内的单词出现频次，并找出出现频率最高的N个单词">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-10T03:25:37.434Z">
+<meta property="og:updated_time" content="2017-11-10T06:31:10.013Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【python笔记】- 统计文件单词出现频次">
 <meta name="twitter:description" content="使用python统计一个文件内的单词出现频次，并找出出现频率最高的N个单词">
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/11/08/python-counting/"/>
+  <link rel="canonical" href="https://gongxufan.github.io/2017/11/08/python-counting/"/>
 
 
 
@@ -249,7 +249,7 @@
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            搜索
+            站内搜索
           </a>
         </li>
       
@@ -307,7 +307,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/08/python-counting/">
+    <link itemprop="mainEntityOfPage" href="https://gongxufan.github.io/2017/11/08/python-counting/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="gongxufan">
@@ -425,7 +425,24 @@
         <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>统计一个文件的单词出现次数是分词工具所具备的基本能力，现在尝试使用python进行文件的读取和单词的处理。</p>
 <h2 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h2><p>读取文件在python里简直轻而易举，直接使用open方法就可以拿到文件句柄。同时令人惊叹的是优雅的错误处理和文件关闭策略，基本代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(file, <span class="string">'r'</span>) <span class="keyword">as</span> f:  </span><br><span class="line">            content = f.read()</span><br></pre></td></tr></table></figure></p>
 <p>使用with open as实现了文件的打开和异常处理以及句柄的关闭</p>
-<h2 id="正则分割单词"><a href="#正则分割单词" class="headerlink" title="正则分割单词"></a>正则分割单词</h2><p>这里使用内置的re模块进行正则抽取，这里只是简单的按照\w分词<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#分割单词  </span><br><span class="line"><span class="keyword">for</span> word <span class="keyword">in</span> re.findall(<span class="string">"\w+"</span>, content):</span><br><span class="line">    self.mapping[word] = self.mapping.get(word, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line"><span class="string">``</span><span class="string">` </span></span><br><span class="line"><span class="string">遍历正则结果同时统计单词的次数，这里使用dict的get方法，第一次调用将计数默认置为0</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## 按照出现次数排序</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">使用python的内置函数sorted即可，只需要传入统计结果和key即可进行排序,其原型如下：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">sorted(iterable, cmp=None, key=None, reverse=False)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">- iterable：iteralbe指的是能够一次返回它的一个成员的对象。</span></span><br><span class="line"><span class="string">iterable主要包括3类：</span></span><br><span class="line"><span class="string">    1) 第一类是所有的序列类型，比如list(列表)、str(字符串)、tuple(元组)。 </span></span><br><span class="line"><span class="string">    2) 第二类是一些非序列类型，比如dict(字典)、file(文件)。</span></span><br><span class="line"><span class="string">    3) 第三类是你定义的任何包含__iter__()或__getitem__()方法的类的对象。</span></span><br><span class="line"><span class="string">- cmp：指定一个定制的比较函数，这个函数接收两个参数（iterable的元素），如果第一个参数小于第二个参数，返回一个负数；如果第一个参数等于第二个参数，返回零；如果第一个参数大于第二个参数，返回一个正数。默认值为None。</span></span><br><span class="line"><span class="string">- key：指定一个接收一个参数的函数，这个函数用于从每个元素中提取一个用于比较的关键字。默认值为None。</span></span><br><span class="line"><span class="string">- reverse：是一个布尔值。如果设置为True，列表元素将被降序排列，默认为升序排列。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">通常来说，key和reverse比一个等价的cmp函数处理速度要快。这是因为对于每个列表元素，cmp都会被调用多次，而key和reverse只被调用一次。</span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>javascript</span><br><span class="line"> sorted(self.mapping.items(), key=lambda item: item[<span class="number">1</span>], reverse=True)[:n]</span><br></pre></td></tr></table></figure></p>
+<h2 id="正则分割单词"><a href="#正则分割单词" class="headerlink" title="正则分割单词"></a>正则分割单词</h2><p>这里使用内置的re模块进行正则抽取，这里只是简单的按照\w分词</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for word in re.findall("\w+", content):</span><br><span class="line">    self.mapping[word] = self.mapping.get(word, 0) + 1</span><br></pre></td></tr></table></figure>
+<p>遍历正则结果同时统计单词的次数，这里使用dict的get方法，第一次调用将计数默认置为0</p>
+<h2 id="按照出现次数排序"><a href="#按照出现次数排序" class="headerlink" title="按照出现次数排序"></a>按照出现次数排序</h2><p>使用python的内置函数sorted即可，只需要传入统计结果和key即可进行排序,其原型如下：</p>
+<p>sorted(iterable, cmp=None, key=None, reverse=False)</p>
+<ul>
+<li>iterable：iteralbe指的是能够一次返回它的一个成员的对象。<br>iterable主要包括3类：<ol>
+<li>第一类是所有的序列类型，比如list(列表)、str(字符串)、tuple(元组)。 </li>
+<li>第二类是一些非序列类型，比如dict(字典)、file(文件)。</li>
+<li>第三类是你定义的任何包含<strong>iter</strong>()或<strong>getitem</strong>()方法的类的对象。</li>
+</ol>
+</li>
+<li>cmp：指定一个定制的比较函数，这个函数接收两个参数（iterable的元素），如果第一个参数小于第二个参数，返回一个负数；如果第一个参数等于第二个参数，返回零；如果第一个参数大于第二个参数，返回一个正数。默认值为None。</li>
+<li>key：指定一个接收一个参数的函数，这个函数用于从每个元素中提取一个用于比较的关键字。默认值为None。</li>
+<li>reverse：是一个布尔值。如果设置为True，列表元素将被降序排列，默认为升序排列。</li>
+</ul>
+<p>通常来说，key和reverse比一个等价的cmp函数处理速度要快。这是因为对于每个列表元素，cmp都会被调用多次，而key和reverse只被调用一次。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sorted(self.mapping.items(), key=lambda item: item[<span class="number">1</span>], reverse=True)[:n]</span><br></pre></td></tr></table></figure>
 <p>这里调用字典数据类型的items方法获取key和value的元组，然后将元组的第二项作为key传给sorted从而实现按照出现次数进行排序</p>
 <h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: UTF-8 -*-  </span><br><span class="line"><span class="keyword">import</span> collections  </span><br><span class="line"><span class="keyword">import</span> re  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">class Counter:  </span><br><span class="line">    <span class="string">'读取文本文件，并统计每个单词的出现频次'</span>  </span><br><span class="line">  </span><br><span class="line">    def __init__(self, file):  </span><br><span class="line">        self.mapping = &#123;&#125;  </span><br><span class="line">        <span class="keyword">with</span> open(file, <span class="string">'r'</span>) <span class="keyword">as</span> f:  </span><br><span class="line">            content = f.read()  </span><br><span class="line">            # 分割单词  </span><br><span class="line">            <span class="keyword">for</span> word <span class="keyword">in</span> re.findall(<span class="string">"\w+"</span>, content):  </span><br><span class="line">                self.mapping[word] = self.mapping.get(word, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line">  </span><br><span class="line">    def most_repeated(self, n):  </span><br><span class="line">        <span class="keyword">return</span> sorted(self.mapping.items(), key=lambda item: item[<span class="number">1</span>], reverse=True)[:n]  </span><br><span class="line">        # return collections.Counter(self.mapping).most_common(5)  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">if</span> <span class="string">'__main__'</span> == __name__:  </span><br><span class="line">    counter = Counter(<span class="string">"/home/gongxufan/.m2/settings.xml"</span>)  </span><br><span class="line">    print counter.most_repeated(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Counter在构造方法中读取文件然后使用正则分割单词存到序列中，遍历的时候统计单词出现次数。这里使用了dict的get(key,defaultValue)方法，第一次出现设置初始值为0。最后在统计排名的时候使用sorted内置函数。其实这字典值的统计排名可以使用内置的collections模块进行操作，而且其实现更加高效和可靠。</p>
@@ -443,7 +460,54 @@
     
 
     
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
 
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/upload/images/wechatpay.jpeg" alt="gongxufan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/upload/images/alipay.jpeg" alt="gongxufan 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    gongxufan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://gongxufan.github.io/2017/11/08/python-counting/" title="【python笔记】- 统计文件单词出现频次">https://gongxufan.github.io/2017/11/08/python-counting/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -488,7 +552,25 @@
 
 
 
-    <div class="post-spread">
+    <div style="margin-top: 20px;text-align: center;">
+      
+        <!--MOB SHARE BEGIN-->
+<div class="-mob-share-ui-button -mob-share-open">分享本文</div>
+<div class="-mob-share-ui" style="display: none">
+    <ul class="-mob-share-list">
+        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+        <li class="-mob-share-qq"><p>QQ好友</p></li>
+        <li class="-mob-share-douban"><p>豆瓣</p></li>
+        <li class="-mob-share-facebook"><p>Facebook</p></li>
+        <li class="-mob-share-twitter"><p>Twitter</p></li>
+    </ul>
+    <div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=你的appkey"></script>
+<!--MOB SHARE END-->
+
       
     </div>
   </div>
@@ -607,6 +689,12 @@
 
           
           
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
 
           
           
@@ -626,7 +714,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读取文件"><span class="nav-number">2.</span> <span class="nav-text">读取文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正则分割单词"><span class="nav-number">3.</span> <span class="nav-text">正则分割单词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整代码"><span class="nav-number">4.</span> <span class="nav-text">完整代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读取文件"><span class="nav-number">2.</span> <span class="nav-text">读取文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正则分割单词"><span class="nav-number">3.</span> <span class="nav-text">正则分割单词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#按照出现次数排序"><span class="nav-number">4.</span> <span class="nav-text">按照出现次数排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整代码"><span class="nav-number">5.</span> <span class="nav-text">完整代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -656,15 +744,9 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
 
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
 
 
 
@@ -796,7 +878,7 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2017/11/08/python-counting/';
+          this.page.url = 'https://gongxufan.github.io/2017/11/08/python-counting/';
           this.page.identifier = '2017/11/08/python-counting/';
           this.page.title = '【python笔记】- 统计文件单词出现频次';
         };
@@ -1044,7 +1126,7 @@
 
                   // select top N slices in content
 
-                  var upperBound = parseInt('1');
+                  var upperBound = parseInt('5');
                   if (upperBound >= 0) {
                     slicesOfContent = slicesOfContent.slice(0, upperBound);
                   }

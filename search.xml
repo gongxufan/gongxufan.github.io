@@ -8,7 +8,24 @@
       <content type="html"><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>统计一个文件的单词出现次数是分词工具所具备的基本能力，现在尝试使用python进行文件的读取和单词的处理。</p>
 <h2 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h2><p>读取文件在python里简直轻而易举，直接使用open方法就可以拿到文件句柄。同时令人惊叹的是优雅的错误处理和文件关闭策略，基本代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(file, <span class="string">'r'</span>) <span class="keyword">as</span> f:  </span><br><span class="line">            content = f.read()</span><br></pre></td></tr></table></figure></p>
 <p>使用with open as实现了文件的打开和异常处理以及句柄的关闭</p>
-<h2 id="正则分割单词"><a href="#正则分割单词" class="headerlink" title="正则分割单词"></a>正则分割单词</h2><p>这里使用内置的re模块进行正则抽取，这里只是简单的按照\w分词<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#分割单词  </span><br><span class="line"><span class="keyword">for</span> word <span class="keyword">in</span> re.findall(<span class="string">"\w+"</span>, content):</span><br><span class="line">    self.mapping[word] = self.mapping.get(word, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line"><span class="string">``</span><span class="string">` </span></span><br><span class="line"><span class="string">遍历正则结果同时统计单词的次数，这里使用dict的get方法，第一次调用将计数默认置为0</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## 按照出现次数排序</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">使用python的内置函数sorted即可，只需要传入统计结果和key即可进行排序,其原型如下：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">sorted(iterable, cmp=None, key=None, reverse=False)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">- iterable：iteralbe指的是能够一次返回它的一个成员的对象。</span></span><br><span class="line"><span class="string">iterable主要包括3类：</span></span><br><span class="line"><span class="string">    1) 第一类是所有的序列类型，比如list(列表)、str(字符串)、tuple(元组)。 </span></span><br><span class="line"><span class="string">    2) 第二类是一些非序列类型，比如dict(字典)、file(文件)。</span></span><br><span class="line"><span class="string">    3) 第三类是你定义的任何包含__iter__()或__getitem__()方法的类的对象。</span></span><br><span class="line"><span class="string">- cmp：指定一个定制的比较函数，这个函数接收两个参数（iterable的元素），如果第一个参数小于第二个参数，返回一个负数；如果第一个参数等于第二个参数，返回零；如果第一个参数大于第二个参数，返回一个正数。默认值为None。</span></span><br><span class="line"><span class="string">- key：指定一个接收一个参数的函数，这个函数用于从每个元素中提取一个用于比较的关键字。默认值为None。</span></span><br><span class="line"><span class="string">- reverse：是一个布尔值。如果设置为True，列表元素将被降序排列，默认为升序排列。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">通常来说，key和reverse比一个等价的cmp函数处理速度要快。这是因为对于每个列表元素，cmp都会被调用多次，而key和reverse只被调用一次。</span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>javascript</span><br><span class="line"> sorted(self.mapping.items(), key=lambda item: item[<span class="number">1</span>], reverse=True)[:n]</span><br></pre></td></tr></table></figure></p>
+<h2 id="正则分割单词"><a href="#正则分割单词" class="headerlink" title="正则分割单词"></a>正则分割单词</h2><p>这里使用内置的re模块进行正则抽取，这里只是简单的按照\w分词</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for word in re.findall("\w+", content):</span><br><span class="line">    self.mapping[word] = self.mapping.get(word, 0) + 1</span><br></pre></td></tr></table></figure>
+<p>遍历正则结果同时统计单词的次数，这里使用dict的get方法，第一次调用将计数默认置为0</p>
+<h2 id="按照出现次数排序"><a href="#按照出现次数排序" class="headerlink" title="按照出现次数排序"></a>按照出现次数排序</h2><p>使用python的内置函数sorted即可，只需要传入统计结果和key即可进行排序,其原型如下：</p>
+<p>sorted(iterable, cmp=None, key=None, reverse=False)</p>
+<ul>
+<li>iterable：iteralbe指的是能够一次返回它的一个成员的对象。<br>iterable主要包括3类：<ol>
+<li>第一类是所有的序列类型，比如list(列表)、str(字符串)、tuple(元组)。 </li>
+<li>第二类是一些非序列类型，比如dict(字典)、file(文件)。</li>
+<li>第三类是你定义的任何包含<strong>iter</strong>()或<strong>getitem</strong>()方法的类的对象。</li>
+</ol>
+</li>
+<li>cmp：指定一个定制的比较函数，这个函数接收两个参数（iterable的元素），如果第一个参数小于第二个参数，返回一个负数；如果第一个参数等于第二个参数，返回零；如果第一个参数大于第二个参数，返回一个正数。默认值为None。</li>
+<li>key：指定一个接收一个参数的函数，这个函数用于从每个元素中提取一个用于比较的关键字。默认值为None。</li>
+<li>reverse：是一个布尔值。如果设置为True，列表元素将被降序排列，默认为升序排列。</li>
+</ul>
+<p>通常来说，key和reverse比一个等价的cmp函数处理速度要快。这是因为对于每个列表元素，cmp都会被调用多次，而key和reverse只被调用一次。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sorted(self.mapping.items(), key=lambda item: item[<span class="number">1</span>], reverse=True)[:n]</span><br></pre></td></tr></table></figure>
 <p>这里调用字典数据类型的items方法获取key和value的元组，然后将元组的第二项作为key传给sorted从而实现按照出现次数进行排序</p>
 <h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: UTF-8 -*-  </span><br><span class="line"><span class="keyword">import</span> collections  </span><br><span class="line"><span class="keyword">import</span> re  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">class Counter:  </span><br><span class="line">    <span class="string">'读取文本文件，并统计每个单词的出现频次'</span>  </span><br><span class="line">  </span><br><span class="line">    def __init__(self, file):  </span><br><span class="line">        self.mapping = &#123;&#125;  </span><br><span class="line">        <span class="keyword">with</span> open(file, <span class="string">'r'</span>) <span class="keyword">as</span> f:  </span><br><span class="line">            content = f.read()  </span><br><span class="line">            # 分割单词  </span><br><span class="line">            <span class="keyword">for</span> word <span class="keyword">in</span> re.findall(<span class="string">"\w+"</span>, content):  </span><br><span class="line">                self.mapping[word] = self.mapping.get(word, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line">  </span><br><span class="line">    def most_repeated(self, n):  </span><br><span class="line">        <span class="keyword">return</span> sorted(self.mapping.items(), key=lambda item: item[<span class="number">1</span>], reverse=True)[:n]  </span><br><span class="line">        # return collections.Counter(self.mapping).most_common(5)  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">if</span> <span class="string">'__main__'</span> == __name__:  </span><br><span class="line">    counter = Counter(<span class="string">"/home/gongxufan/.m2/settings.xml"</span>)  </span><br><span class="line">    print counter.most_repeated(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Counter在构造方法中读取文件然后使用正则分割单词存到序列中，遍历的时候统计单词出现次数。这里使用了dict的get(key,defaultValue)方法，第一次出现设置初始值为0。最后在统计排名的时候使用sorted内置函数。其实这字典值的统计排名可以使用内置的collections模块进行操作，而且其实现更加高效和可靠。</p>
@@ -46,7 +63,7 @@
 <p>在这里配置msg和api的处理器，分别是处理微信消息和微信api调用的处理逻辑</p>
 <h2 id="系统主要功能界面"><a href="#系统主要功能界面" class="headerlink" title="系统主要功能界面"></a>系统主要功能界面</h2><p><img src="/upload/images/weixin-manager/main-func.png" alt="img"><br>自定义菜单还是实现了跟官方一样的菜单排序，菜单的的图文消息编辑等<br><img src="/upload/images/weixin-manager/menu-manage.png" alt="img"><br>素材管理实现图文消息的编辑和新建，图片的管理和查看<br><img src="/upload/images/weixin-manager/muti-message.png" alt="img"><br><img src="/upload/images/weixin-manager/muti-message-mg.png" alt="img"><br>可以设置自动回复和消息群发<br><img src="/upload/images/weixin-manager/auto-reply.png" alt="img"><br>其他功能就不在此赘述，附上项目地址：<a href="https://github.com/gongxufan/wechat-conf/" target="_blank" rel="external">https://github.com/gongxufan/wechat-conf/</a></p>
 <blockquote>
-<p>版权声明：本文为博主原创文章，未经博主允许不得转载。本博客地址：<a href="https://gongxufan.github.io" target="_blank" rel="external">https://gongxufan.github.io</a></p>
+<p>版权声明：本文为博主原创文章，未经博主允许不得转载。本博客地址：<a href="https://gongxufan.github.io">https://gongxufan.github.io</a></p>
 </blockquote>
 ]]></content>
       
@@ -59,9 +76,9 @@
         
         <tags>
             
-            <tag> java </tag>
-            
             <tag> 前端 </tag>
+            
+            <tag> java </tag>
             
         </tags>
         
@@ -113,7 +130,7 @@
       <title><![CDATA[基于Jtopo的网络拓扑编辑器初探]]></title>
       <url>/2016/12/07/topology-editor/</url>
       <content type="html"><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>本文实现了基于Jtopo的在线网络拓扑设计和编辑，可以创建复杂网络并对网络和设备进行各种操作，提供拓扑的序列化和反序列操作。</p>
-<p>为了方便演示，我已经把一个静态DEMO部署到github，<a href="https://gongxufan.github.io/web-topology/topologyEditor.html" target="_blank" rel="external">传送门</a>{:target=”_blank”}</p>
+<p>为了方便演示，我已经把一个静态DEMO部署到github，<a href="https://gongxufan.github.io/web-topology/topologyEditor.html">传送门</a>{:target=”_blank”}</p>
 <p>关于项目访问,因为读取远程json数据,直接用浏览器打开会有安全限制.请将项目放到tomcat启动访问或者直接用idea/webstorm打开项目直接右键打开,如下图所示:<br><img src="/upload/images/topology/how-to-open.png" alt="img"></p>
 <p>完整代码单独放到了github：<a href="https://github.com/gongxufan/web-topology" target="_blank" rel="external">https://github.com/gongxufan/web-topology</a></p>
 <h2 id="功能简介"><a href="#功能简介" class="headerlink" title="功能简介"></a>功能简介</h2><p>基本的操作可以看下面的GIF图，节点从左边图标栏拖拽至编辑区，通过单击节点图标，然后松开鼠标按键则可拖动一条连线。在目标节点单击，怎完成一次连线操作。左栏可以选择多种连线方式。<br><img src="/upload/images/topology/demo.gif" alt="img"></p>
@@ -173,9 +190,9 @@
         
         <tags>
             
-            <tag> 前端 </tag>
-            
             <tag> javascript </tag>
+            
+            <tag> 前端 </tag>
             
         </tags>
         

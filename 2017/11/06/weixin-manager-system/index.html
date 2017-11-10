@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java,前端," />
+  <meta name="keywords" content="前端,java," />
 
 
 
@@ -80,23 +80,23 @@
 
 
 <meta name="description" content="仿微信官方公众号后台管理系统,实现公众号的菜单管理、用户管理、消息管理、素材管理、消息群发，自动回复等基本功能">
-<meta name="keywords" content="java,前端">
+<meta name="keywords" content="前端,java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="微信.公众平台开发模式配置管理系统">
-<meta property="og:url" content="http://yoursite.com/2017/11/06/weixin-manager-system/index.html">
+<meta property="og:url" content="https://gongxufan.github.io/2017/11/06/weixin-manager-system/index.html">
 <meta property="og:site_name" content="潇湘往事-Blog">
 <meta property="og:description" content="仿微信官方公众号后台管理系统,实现公众号的菜单管理、用户管理、消息管理、素材管理、消息群发，自动回复等基本功能">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/upload/images/weixin-manager/main-func.png">
-<meta property="og:image" content="http://yoursite.com/upload/images/weixin-manager/menu-manage.png">
-<meta property="og:image" content="http://yoursite.com/upload/images/weixin-manager/muti-message.png">
-<meta property="og:image" content="http://yoursite.com/upload/images/weixin-manager/muti-message-mg.png">
-<meta property="og:image" content="http://yoursite.com/upload/images/weixin-manager/auto-reply.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/weixin-manager/main-func.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/weixin-manager/menu-manage.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/weixin-manager/muti-message.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/weixin-manager/muti-message-mg.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/weixin-manager/auto-reply.png">
 <meta property="og:updated_time" content="2017-11-10T05:02:31.402Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信.公众平台开发模式配置管理系统">
 <meta name="twitter:description" content="仿微信官方公众号后台管理系统,实现公众号的菜单管理、用户管理、消息管理、素材管理、消息群发，自动回复等基本功能">
-<meta name="twitter:image" content="http://yoursite.com/upload/images/weixin-manager/main-func.png">
+<meta name="twitter:image" content="https://gongxufan.github.io/upload/images/weixin-manager/main-func.png">
 
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/11/06/weixin-manager-system/"/>
+  <link rel="canonical" href="https://gongxufan.github.io/2017/11/06/weixin-manager-system/"/>
 
 
 
@@ -255,7 +255,7 @@
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            搜索
+            站内搜索
           </a>
         </li>
       
@@ -313,7 +313,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/06/weixin-manager-system/">
+    <link itemprop="mainEntityOfPage" href="https://gongxufan.github.io/2017/11/06/weixin-manager-system/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="gongxufan">
@@ -438,7 +438,7 @@
 <p>在这里配置msg和api的处理器，分别是处理微信消息和微信api调用的处理逻辑</p>
 <h2 id="系统主要功能界面"><a href="#系统主要功能界面" class="headerlink" title="系统主要功能界面"></a>系统主要功能界面</h2><p><img src="/upload/images/weixin-manager/main-func.png" alt="img"><br>自定义菜单还是实现了跟官方一样的菜单排序，菜单的的图文消息编辑等<br><img src="/upload/images/weixin-manager/menu-manage.png" alt="img"><br>素材管理实现图文消息的编辑和新建，图片的管理和查看<br><img src="/upload/images/weixin-manager/muti-message.png" alt="img"><br><img src="/upload/images/weixin-manager/muti-message-mg.png" alt="img"><br>可以设置自动回复和消息群发<br><img src="/upload/images/weixin-manager/auto-reply.png" alt="img"><br>其他功能就不在此赘述，附上项目地址：<a href="https://github.com/gongxufan/wechat-conf/" target="_blank" rel="external">https://github.com/gongxufan/wechat-conf/</a></p>
 <blockquote>
-<p>版权声明：本文为博主原创文章，未经博主允许不得转载。本博客地址：<a href="https://gongxufan.github.io" target="_blank" rel="external">https://gongxufan.github.io</a></p>
+<p>版权声明：本文为博主原创文章，未经博主允许不得转载。本博客地址：<a href="https://gongxufan.github.io">https://gongxufan.github.io</a></p>
 </blockquote>
 
       
@@ -450,16 +450,63 @@
     
 
     
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
 
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/upload/images/wechatpay.jpeg" alt="gongxufan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/upload/images/alipay.jpeg" alt="gongxufan 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    gongxufan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://gongxufan.github.io/2017/11/06/weixin-manager-system/" title="微信.公众平台开发模式配置管理系统">https://gongxufan.github.io/2017/11/06/weixin-manager-system/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
-          
             <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/java/" rel="tag"># java</a>
           
         </div>
       
@@ -501,7 +548,25 @@
 
 
 
-    <div class="post-spread">
+    <div style="margin-top: 20px;text-align: center;">
+      
+        <!--MOB SHARE BEGIN-->
+<div class="-mob-share-ui-button -mob-share-open">分享本文</div>
+<div class="-mob-share-ui" style="display: none">
+    <ul class="-mob-share-list">
+        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+        <li class="-mob-share-qq"><p>QQ好友</p></li>
+        <li class="-mob-share-douban"><p>豆瓣</p></li>
+        <li class="-mob-share-facebook"><p>Facebook</p></li>
+        <li class="-mob-share-twitter"><p>Twitter</p></li>
+    </ul>
+    <div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=你的appkey"></script>
+<!--MOB SHARE END-->
+
       
     </div>
   </div>
@@ -620,6 +685,12 @@
 
           
           
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
 
           
           
@@ -669,15 +740,9 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
 
 
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
 
 
 
@@ -809,7 +874,7 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2017/11/06/weixin-manager-system/';
+          this.page.url = 'https://gongxufan.github.io/2017/11/06/weixin-manager-system/';
           this.page.identifier = '2017/11/06/weixin-manager-system/';
           this.page.title = '微信.公众平台开发模式配置管理系统';
         };
@@ -1057,7 +1122,7 @@
 
                   // select top N slices in content
 
-                  var upperBound = parseInt('1');
+                  var upperBound = parseInt('5');
                   if (upperBound >= 0) {
                     slicesOfContent = slicesOfContent.slice(0, upperBound);
                   }
