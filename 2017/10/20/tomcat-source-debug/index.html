@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,tomcat," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="搭建tomcat8的源码编译和调试环境，详细记录调试工程的配置过程和注意点。">
+<meta name="keywords" content="java,tomcat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【基于IntelliJ IDEA环境】Tomcat8源码的调试和项目部署">
+<meta property="og:url" content="https://gongxufan.github.io/2017/10/20/tomcat-source-debug/index.html">
+<meta property="og:site_name" content="潇湘往事-Blog">
+<meta property="og:description" content="搭建tomcat8的源码编译和调试环境，详细记录调试工程的配置过程和注意点。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/tomcat/jiegou.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/tomcat/conf.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/tomcat/open.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/tomcat/whole.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/tomcat/env.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/tomcat/error.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/tomcat/init.png">
+<meta property="og:updated_time" content="2017-11-10T14:35:23.422Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【基于IntelliJ IDEA环境】Tomcat8源码的调试和项目部署">
+<meta name="twitter:description" content="搭建tomcat8的源码编译和调试环境，详细记录调试工程的配置过程和注意点。">
+<meta name="twitter:image" content="https://gongxufan.github.io/upload/images/tomcat/jiegou.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://gongxufan.github.io/2017/10/20/tomcat-source-debug/"/>
+
+
+
+
+
+  <title>【基于IntelliJ IDEA环境】Tomcat8源码的调试和项目部署 | 潇湘往事-Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">潇湘往事-Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">平凡生活，点点滴滴</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            站内搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://gongxufan.github.io/2017/10/20/tomcat-source-debug/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="gongxufan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avator.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="潇湘往事-Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【基于IntelliJ IDEA环境】Tomcat8源码的调试和项目部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-20T12:32:00+08:00">
+                2017-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/随笔/" itemprop="url" rel="index">
+                    <span itemprop="name">随笔</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/10/20/tomcat-source-debug/" class="leancloud_visitors" data-flag-title="【基于IntelliJ IDEA环境】Tomcat8源码的调试和项目部署">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,473 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长≈</span>
+                
+                <span title="阅读时长">
+                  19 分钟
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  搭建tomcat8的源码编译和调试环境，详细记录调试工程的配置过程和注意点。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Tomcat作为J2EE的开源实现，其代码具有很高的参考价值，我们可以从中汲取很多的知识。比如ClassLoader机制，设计模式等。本文只描述了环境搭配方法，具体的源码分析可以参考《How Tomcat Works》 一书。Tomcat现在都到9了，虽然该书是基于5.0但还是具有一定参考意义的。</p>
+<h2 id="一，准备工作"><a href="#一，准备工作" class="headerlink" title="一，准备工作"></a>一，准备工作</h2><p>Tomcat的构建是基于Ant和Eclipse的，然而现在很多人都喜欢IDEA+Maven的项目构建方式，所以本文将基于这个环境来搭建源码的调试。我们需要以下工具：</p>
+<ul>
+<li><p>Tomcat源码下载地址：<a href="https://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-8/v8.5.23/src/apache-tomcat-8.5.23-src.tar.gz" target="_blank" rel="external">https://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-8/v8.5.23/src/apache-tomcat-8.5.23-src.tar.gz</a></p>
+</li>
+<li><p>IDEA工具：<a href="https://www.jetbrains.com/idea/download" target="_blank" rel="external">https://www.jetbrains.com/idea/download</a></p>
+</li>
+<li><p>MAVEN：<a href="http://maven.apache.org/download.cgi" target="_blank" rel="external">http://maven.apache.org/download.cgi</a></p>
+</li>
+<li><p>JDK：自然不用多提了，但是要按照所选源码要求的版本，这里用的是JDK8</p>
+</li>
+</ul>
+<p>安装和下载这些软件包就可以开始搭建调试环境了。</p>
+<h2 id="二，项目结构"><a href="#二，项目结构" class="headerlink" title="二，项目结构"></a>二，项目结构</h2><p><img src="/upload/images/tomcat/jiegou.png" alt="img"></p>
+<ul>
+<li>新建一个目录，比如：D:\code\tomcat8，然后将tomcat8的源码解压至该目录</li>
+<li>新建catalina-home目录，然后将apache-tomcat-8.5.23-src目录下的 conf文件夹拷贝到此处，该目录结构如下<br><img src="/upload/images/tomcat/conf.png" alt="img"><br>除了conf目录其他都是可选的，webapps用于我们应用默认的部署目录，work logs是启动Tomcat自动生成的，其结构跟我们下载的二进制Tomcat程序是一样的.</li>
+<li>配置Maven依赖</li>
+</ul>
+<p>我们采用module的形式来组织目录,首先在根目录(D:\code\tomcat8)下创建pom.xml,其内容如下:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;    </span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span>    </span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"</span>&gt;</span>    </span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>gxf<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>apache-tomcat-8<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>apache-tomcat-8-source<span class="tag">&lt;/<span class="name">name</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">packaging</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span>    </span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">modules</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">module</span>&gt;</span>apache-tomcat-8.5.23-src<span class="tag">&lt;/<span class="name">module</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;/<span class="name">modules</span>&gt;</span>    </span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>这里主要指定module为Tomcat的源码目录,然后在apache-tomcat-8.5.23-src配置Tomcat源码额外的依赖，在该目录创建pom.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;    </span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span>    </span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span>    </span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span>    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.tomcat<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>Tomcat8.0<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Tomcat8.0<span class="tag">&lt;/<span class="name">name</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>8.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span>    </span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">finalName</span>&gt;</span>Tomcat8.0<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">sourceDirectory</span>&gt;</span>java<span class="tag">&lt;/<span class="name">sourceDirectory</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">testSourceDirectory</span>&gt;</span>test<span class="tag">&lt;/<span class="name">testSourceDirectory</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">resources</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">resource</span>&gt;</span>    </span><br><span class="line">                <span class="tag">&lt;<span class="name">directory</span>&gt;</span>java<span class="tag">&lt;/<span class="name">directory</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;/<span class="name">resource</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;/<span class="name">resources</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">testResources</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">testResource</span>&gt;</span>    </span><br><span class="line">                <span class="tag">&lt;<span class="name">directory</span>&gt;</span>test<span class="tag">&lt;/<span class="name">directory</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;/<span class="name">testResource</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;/<span class="name">testResources</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span>    </span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>    </span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>    </span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span>    </span><br><span class="line">    </span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span>    </span><br><span class="line">                    <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span>    </span><br><span class="line">                    <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span>    </span><br><span class="line">                    <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span>    </span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span>    </span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.easymock<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>easymock<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5<span class="tag">&lt;/<span class="name">version</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>  </span><br><span class="line">  </span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ant<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>ant<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>wsdl4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>wsdl4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.6.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.xml<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jaxrpc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.eclipse.jdt.core.compiler<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>ecj<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.6.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span>    </span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>至此基本的结构已经完成了</p>
+<h2 id="三，准备构建"><a href="#三，准备构建" class="headerlink" title="三，准备构建"></a>三，准备构建</h2><h3 id="使用IDEA打开项目"><a href="#使用IDEA打开项目" class="headerlink" title="使用IDEA打开项目"></a>使用IDEA打开项目</h3><p><img src="/upload/images/tomcat/open.png" alt="img"><br>注意这里是直接打开项目，定位到D:\code\tomcat8，然后选择pom.xml，idea会自动识别Maven项目。这一部完成后IDEA开始下载MAVEN依赖包，完整的结构如下：<br><img src="/upload/images/tomcat/whole.png" alt="img"></p>
+<h3 id="配置编译环境"><a href="#配置编译环境" class="headerlink" title="配置编译环境"></a>配置编译环境</h3><p>说明：如果编译build的时候出现Test测试代码报错，删除该代码即可。本文中的Tomcat源码util.TestCookieFilter类会报错，将其删除即可。<br><img src="/upload/images/tomcat/env.png" alt="img"><br>1) 打开项目的Run/Debug配置界面，Main class设置为org.apache.catalina.startup.Bootstrap<br>2) 添加VM options -Dcatalina.home=catalina-home -Dcatalina.base=catalina-home   -Djava.endorsed.dirs=catalina-home/endorsed -Djava.io.tmpdir=catalina-home/temp   -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager   -Djava.util.logging.config.file=catalina-home/conf/logging.properties<br>3) 选择module为Tomcat8.0（源码所在的module）<br>4) 点击Debug按钮启动程序</p>
+<h3 id="启动工程"><a href="#启动工程" class="headerlink" title="启动工程"></a>启动工程</h3><p>我们点击调试按钮后发现会报错，如下：<br><img src="/upload/images/tomcat/error.png" alt="img"><br>原来是构建tomcat-jdbc的时候报错了，这里我们手动指定版本号就可以了，修改文件D:\code\tomcat8\apache-tomcat-8.5.23-src\modules\jdbc-pool\resources\MANIFEST.MF中的Bundle-Version: @VERSION@，把Bundle-Version: 8。这里的构建可能会有点卡顿。</p>
+<p>好了，一切顺利项目启动成功了。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">"C:\Program Files\Java\jdk1.8.0_111\bin\java" -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:55097,suspend=y,server=n -Dvisualvm.id=150866430461380 -Dcatalina.home=catalina-home -Dcatalina.base=catalina-home -Djava.endorsed.dirs=catalina-home/endorsed -Djava.io.tmpdir=catalina-home/temp -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djava.util.logging.config.file=catalina-home/conf/logging.properties -Dfile.encoding=UTF-8 -classpath "C:\Program Files\Java\jdk1.8.0_111\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\deploy.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\access-bridge-64.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\cldrdata.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\dnsns.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\jaccess.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\jfxrt.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\localedata.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\nashorn.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\sunec.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\sunjce_provider.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\sunmscapi.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\sunpkcs11.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\ext\zipfs.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\javaws.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\jfxswt.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\management-agent.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\plugin.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_111\jre\lib\rt.jar;D:\code\tomcat8\apache-tomcat-8.5.23-src\target\classes;C:\Users\gongxufan\.m2\repository\org\apache\ant\ant\1.7.0\ant-1.7.0.jar;C:\Users\gongxufan\.m2\repository\org\apache\ant\ant-launcher\1.7.0\ant-launcher-1.7.0.jar;C:\Users\gongxufan\.m2\repository\wsdl4j\wsdl4j\1.6.2\wsdl4j-1.6.2.jar;C:\Users\gongxufan\.m2\repository\javax\xml\jaxrpc-api\1.1\jaxrpc-api-1.1.jar;C:\Users\gongxufan\.m2\repository\org\eclipse\jdt\core\compiler\ecj\4.6.1\ecj-4.6.1.jar;D:\soft\IntelliJ IDEA 2017.1.4\lib\idea_rt.jar" org.apache.catalina.startup.Bootstrap  </span><br><span class="line">Connected to the target VM, address: '127.0.0.1:55097', transport: 'socket'  </span><br><span class="line">20-Oct-2017 13:05:22.684 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/@VERSION@  </span><br><span class="line">20-Oct-2017 13:05:22.691 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          @VERSION_BUILT@  </span><br><span class="line">20-Oct-2017 13:05:22.691 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         @VERSION_NUMBER@  </span><br><span class="line">20-Oct-2017 13:05:22.692 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 10  </span><br><span class="line">20-Oct-2017 13:05:22.692 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0  </span><br><span class="line">20-Oct-2017 13:05:22.692 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64  </span><br><span class="line">20-Oct-2017 13:05:22.692 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk1.8.0_111\jre  </span><br><span class="line">20-Oct-2017 13:05:22.693 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_111-b14  </span><br><span class="line">20-Oct-2017 13:05:22.693 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation  </span><br><span class="line">20-Oct-2017 13:05:22.693 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         D:\code\tomcat8\catalina-home  </span><br><span class="line">20-Oct-2017 13:05:22.693 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         D:\code\tomcat8\catalina-home  </span><br><span class="line">20-Oct-2017 13:05:22.693 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:55097,suspend=y,server=n  </span><br><span class="line">20-Oct-2017 13:05:22.693 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dvisualvm.id=150866430461380  </span><br><span class="line">20-Oct-2017 13:05:22.694 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=catalina-home  </span><br><span class="line">20-Oct-2017 13:05:22.694 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=catalina-home  </span><br><span class="line">20-Oct-2017 13:05:22.694 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=catalina-home/endorsed  </span><br><span class="line">20-Oct-2017 13:05:22.694 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=catalina-home/temp  </span><br><span class="line">20-Oct-2017 13:05:22.694 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager  </span><br><span class="line">20-Oct-2017 13:05:22.694 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=catalina-home/conf/logging.properties  </span><br><span class="line">20-Oct-2017 13:05:22.694 信息 [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dfile.encoding=UTF-8  </span><br><span class="line">20-Oct-2017 13:05:22.695 信息 [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [C:\Program Files\Java\jdk1.8.0_111\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;D:\soft\oracle\bin;C:\Python27\;C:\Python27\Scripts;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;D:\apache-maven-3.5.0\bin;C:\Program Files\Java\jdk1.8.0_111\bin;D:\soft\Git\cmd;C:\Program Files\MySQL\MySQL Server 5.5\bin;D:\soft\AndroidStudio\sdk\tools;D:\soft\AndroidStudio\sdk\platform-tools;D:\soft\nodejs\;D:\soft\AndroidStudio\sdk\tools\bin;D:\soft\SVN\bin;D:\soft\AndroidStudio\app\gradle\gradle-3.2\bin;D:\soft\gradle-4.1\bin;C:\Users\gongxufan\AppData\Local\Microsoft\WindowsApps;C:\Users\gongxufan\AppData\Roaming\npm;;.]  </span><br><span class="line">20-Oct-2017 13:05:22.941 信息 [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]  </span><br><span class="line">20-Oct-2017 13:05:23.226 信息 [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read  </span><br><span class="line">20-Oct-2017 13:05:23.230 信息 [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]  </span><br><span class="line">20-Oct-2017 13:05:23.232 信息 [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read  </span><br><span class="line">20-Oct-2017 13:05:23.233 信息 [main] org.apache.catalina.startup.Catalina.load Initialization processed in 1361 ms  </span><br><span class="line">20-Oct-2017 13:05:23.290 信息 [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]  </span><br><span class="line">20-Oct-2017 13:05:23.290 信息 [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/@VERSION@</span><br></pre></td></tr></table></figure></p>
+<h2 id="四，项目部署"><a href="#四，项目部署" class="headerlink" title="四，项目部署"></a>四，项目部署</h2><p>项目启动完毕我们可以测试了，在浏览器访问<a href="http://localhost:8080/就可以看到我们经典的欢迎页面了。这里前提是要把源码目录下的webapps复制到catalina-home目录。" target="_blank" rel="external">http://localhost:8080/就可以看到我们经典的欢迎页面了。这里前提是要把源码目录下的webapps复制到catalina-home目录。</a></p>
+<p>然而当访问JSP的时候却报错了，比如访问：<a href="http://localhost:8080/index.jsp或者我们自己的项目的时候会出现JSP无法编译的错误。" target="_blank" rel="external">http://localhost:8080/index.jsp或者我们自己的项目的时候会出现JSP无法编译的错误。</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">java.lang.NullPointerException  </span><br><span class="line">    at org.apache.jasper.JspCompilationContext.getTldResourcePath(JspCompilationContext.java:<span class="number">536</span>)  </span><br><span class="line">    at org.apache.jasper.compiler.Parser.parseTaglibDirective(Parser.java:<span class="number">410</span>)  </span><br><span class="line">    at org.apache.jasper.compiler.Parser.parseDirective(Parser.java:<span class="number">469</span>)  </span><br><span class="line">    at org.apache.jasper.compiler.Parser.parseElements(Parser.java:<span class="number">1430</span>)  </span><br><span class="line">    at org.apache.jasper.compiler.Parser.parse(Parser.java:<span class="number">139</span>)  </span><br><span class="line">    at org.apache.jasper.compiler.ParserController.doParse(ParserController.java:<span class="number">227</span>)  </span><br><span class="line">    at org.apache.jasper.compiler.ParserController.parse(ParserController.java:<span class="number">100</span>)  </span><br><span class="line">    at org.apache.jasper.compiler.Compiler.generateJava(Compiler.java:<span class="number">199</span>)  </span><br><span class="line">    at org.apache.jasper.compiler.Compiler.compile(Compiler.java:<span class="number">356</span>)  </span><br><span class="line">    at org.apache.jasper.compiler.Compiler.compile(Compiler.java:<span class="number">336</span>)  </span><br><span class="line">    at org.apache.jasper.compiler.Compiler.compile(Compiler.java:<span class="number">323</span>)  </span><br><span class="line">    at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:<span class="number">570</span>)  </span><br><span class="line">    at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:<span class="number">356</span>)  </span><br><span class="line">    at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:<span class="number">396</span>)  </span><br><span class="line">    at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:<span class="number">340</span>)  </span><br><span class="line">    at javax.servlet.http.HttpServlet.service(HttpServlet.java:<span class="number">725</span>)  </span><br><span class="line">    at org.wso2.carbon.ui.JspServlet.service(JspServlet.java:<span class="number">155</span>)  </span><br><span class="line">    at org.wso2.carbon.ui.TilesJspServlet.service(TilesJspServlet.java:<span class="number">80</span>)  </span><br><span class="line">    at javax.servlet.http.HttpServlet.service(HttpServlet.java:<span class="number">725</span>)</span><br></pre></td></tr></table></figure></p>
+<p>原因是我们直接启动org.apache.catalina.startup.Bootstrap的时候没有加载org.apache.jasper.servlet.JasperInitializer，从而无法编译JSP。这在Tomcat6/7是没有这个问题的。解决办法是在tomcat的源码org.apache.catalina.startup.ContextConfig中手动将JSP解析器初始化：<br><code>context.addServletContainerInitializer(new JasperInitializer(), null);</code><br><img src="/upload/images/tomcat/init.png" alt="img"><br>至此，我们可以将项目直接放到Tomcat来启动调试了。本文描述的方式同样可以适用于其他版本(Tomcat6+)的Tomcat调试。</p>
+<h2 id="五，部署外部项目"><a href="#五，部署外部项目" class="headerlink" title="五，部署外部项目"></a>五，部署外部项目</h2><p>默认情况下我们必须把应用程序部署到catalina-home/webapps下，如何直接部署访问外部的应用程序?我们只需要修改server.xml和web.xml配置即可。<br>1) 编辑catalina-home/conf/server.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">"localhost"</span>  <span class="attr">appBase</span>=<span class="string">"webapps"</span>  </span></span><br><span class="line"><span class="tag">           <span class="attr">unpackWARs</span>=<span class="string">"true"</span> <span class="attr">autoDeploy</span>=<span class="string">"true"</span>&gt;</span>  </span><br><span class="line">  </span><br><span class="line">       <span class="comment">&lt;!-- SingleSignOn valve, share authentication between web applications  </span></span><br><span class="line"><span class="comment">            Documentation at: /docs/config/valve.html --&gt;</span>  </span><br><span class="line">       <span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">       &lt;Valve className="org.apache.catalina.authenticator.SingleSignOn" /&gt; </span></span><br><span class="line"><span class="comment">       --&gt;</span>  </span><br><span class="line">  </span><br><span class="line">       <span class="comment">&lt;!-- Access log processes all example.  </span></span><br><span class="line"><span class="comment">            Documentation at: /docs/config/valve.html  </span></span><br><span class="line"><span class="comment">            <span class="doctag">Note:</span> The pattern used is equivalent to using pattern="common" --&gt;</span>  </span><br><span class="line">       <span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.valves.AccessLogValve"</span> <span class="attr">directory</span>=<span class="string">"logs"</span>  </span></span><br><span class="line"><span class="tag">              <span class="attr">prefix</span>=<span class="string">"localhost_access_log"</span> <span class="attr">suffix</span>=<span class="string">".txt"</span>  </span></span><br><span class="line"><span class="tag">              <span class="attr">pattern</span>=<span class="string">"%h %l %u %t "</span>%<span class="attr">r</span>" %<span class="attr">s</span> %<span class="attr">b</span>" /&gt;</span>  </span><br><span class="line">       <span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">"/easyshare-web"</span> <span class="attr">reloadable</span>=<span class="string">"true"</span> <span class="attr">debug</span>=<span class="string">"0"</span> <span class="attr">docBase</span>=<span class="string">"D:\code\work\easyshare2017\easyshare-web\target\easyshare-web-1.0-SNAPSHOT"</span> <span class="attr">workDir</span>=<span class="string">"D:\code\work\easyshare2017\easyshare-web\target\easyshare-web-1.0-SNAPSHOT\work"</span> <span class="attr">crossContext</span>=<span class="string">"true"</span> &gt;</span>  </span><br><span class="line">       <span class="tag">&lt;/<span class="name">Context</span>&gt;</span>  </span><br><span class="line">     <span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>在Host节点增加Context配置，path是我们访问项目时的contextPath，docBase设置为外部应用程序的绝对路径,workDir为jsp编译结果存放路径，这里是指为docBase/work<br>2) 编辑catalina-home/conf/web.xml（一般不需要这个步骤，如果第一步出现404再尝试开启）<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span>  </span><br><span class="line">       <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>default<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span>  </span><br><span class="line">       <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>org.apache.catalina.servlets.DefaultServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span>  </span><br><span class="line">       <span class="tag">&lt;<span class="name">init-param</span>&gt;</span>  </span><br><span class="line">           <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>debug<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span>  </span><br><span class="line">           <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>0<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span>  </span><br><span class="line">       <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span>  </span><br><span class="line">       <span class="tag">&lt;<span class="name">init-param</span>&gt;</span>  </span><br><span class="line">           <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>listings<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span>  </span><br><span class="line">           <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span>  </span><br><span class="line">       <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span>  </span><br><span class="line">       <span class="tag">&lt;<span class="name">load-on-startup</span>&gt;</span>1<span class="tag">&lt;/<span class="name">load-on-startup</span>&gt;</span>  </span><br><span class="line">   <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>这里将listings改为true，这个参数控制当访问的资源是物理目录时，是否列出该目录下的文件，为了安全默认是禁止的。</p>
+<p>可见，如果在浏览器中输入的资源是一个目录，那么就会列出该目录下的文件，这样是不安全的，所以默认是禁止的。其代码在org.apache.catalina.servlets.DefaultServlet中实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (resource.isDirectory()) &#123;  </span><br><span class="line">           <span class="keyword">if</span> (!path.endsWith(<span class="string">"/"</span>)) &#123;  </span><br><span class="line">               doDirectoryRedirect(request, response);  </span><br><span class="line">               <span class="keyword">return</span>;  </span><br><span class="line">           &#125;  </span><br><span class="line">  </span><br><span class="line">           <span class="comment">// Skip directory listings if we have been configured to  </span></span><br><span class="line">           <span class="comment">// suppress them  </span></span><br><span class="line">           <span class="keyword">if</span> (!listings) &#123;  </span><br><span class="line">               response.sendError(HttpServletResponse.SC_NOT_FOUND,  </span><br><span class="line">                                  request.getRequestURI());  </span><br><span class="line">               <span class="keyword">return</span>;  </span><br><span class="line">           &#125;  </span><br><span class="line">           contentType = <span class="string">"text/html;charset=UTF-8"</span>;  </span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;  </span><br><span class="line">           <span class="keyword">if</span> (!isError) &#123;  </span><br><span class="line">               <span class="keyword">if</span> (useAcceptRanges) &#123;  </span><br><span class="line">                   <span class="comment">// Accept ranges header  </span></span><br><span class="line">                   response.setHeader(<span class="string">"Accept-Ranges"</span>, <span class="string">"bytes"</span>);  </span><br><span class="line">               &#125;  </span><br><span class="line">  </span><br><span class="line">               <span class="comment">// Parse range specifier  </span></span><br><span class="line">               ranges = parseRange(request, response, resource);  </span><br><span class="line">  </span><br><span class="line">               <span class="comment">// ETag header  </span></span><br><span class="line">               response.setHeader(<span class="string">"ETag"</span>, eTag);  </span><br><span class="line">  </span><br><span class="line">               <span class="comment">// Last-Modified header  </span></span><br><span class="line">               response.setHeader(<span class="string">"Last-Modified"</span>, lastModifiedHttp);  </span><br><span class="line">           &#125;  </span><br><span class="line">  </span><br><span class="line">           <span class="comment">// Get content length  </span></span><br><span class="line">           contentLength = resource.getContentLength();  </span><br><span class="line">           <span class="comment">// Special case for zero length files, which would cause a  </span></span><br><span class="line">           <span class="comment">// (silent) ISE when setting the output buffer size  </span></span><br><span class="line">           <span class="keyword">if</span> (contentLength == <span class="number">0L</span>) &#123;  </span><br><span class="line">               serveContent = <span class="keyword">false</span>;  </span><br><span class="line">           &#125;  </span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure></p>
+<p>当访问的资源是一个物理目录时，会根据listings的值来判断是否列出目录下的文件列表。</p>
+<h2 id="end"><a href="#end" class="headerlink" title="end"></a>end</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/upload/images/wechatpay.jpeg" alt="gongxufan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/upload/images/alipay.jpeg" alt="gongxufan 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    gongxufan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://gongxufan.github.io/2017/10/20/tomcat-source-debug/" title="【基于IntelliJ IDEA环境】Tomcat8源码的调试和项目部署">https://gongxufan.github.io/2017/10/20/tomcat-source-debug/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/tomcat/" rel="tag"># tomcat</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/20/spring-data-jpa-cache/" rel="next" title="spring-data-jpa使用缓存的注意事项">
+                <i class="fa fa-chevron-left"></i> spring-data-jpa使用缓存的注意事项
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/20/servlets-and-filters/" rel="prev" title="Probably the largest collection of Java(tm) Servlets and filters">
+                Probably the largest collection of Java(tm) Servlets and filters <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div style="margin-top: 20px;text-align: center;">
+      
+        <!--MOB SHARE BEGIN-->
+<div class="-mob-share-ui-button -mob-share-open">分享本文</div>
+<div class="-mob-share-ui" style="display: none">
+    <ul class="-mob-share-list">
+        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+                                                <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+                                                <li class="-mob-share-qzone"><p>QQ空间</p></li>
+                                                <li class="-mob-share-qq"><p>QQ好友</p></li>
+                                                <li class="-mob-share-weixin"><p>微信</p></li>
+                                                <li class="-mob-share-douban"><p>豆瓣</p></li>
+                                                <li class="-mob-share-renren"><p>人人网</p></li>
+                                                <li class="-mob-share-kaixin"><p>开心网</p></li>
+                                                <li class="-mob-share-facebook"><p>Facebook</p></li>
+                                                <li class="-mob-share-twitter"><p>Twitter</p></li>
+                                                <li class="-mob-share-pocket"><p>Pocket</p></li>
+                                                <li class="-mob-share-google"><p>Google+</p></li>
+                                                <li class="-mob-share-youdao"><p>有道云笔记</p></li>
+                                                <li class="-mob-share-mingdao"><p>明道</p></li>
+                                                <li class="-mob-share-pengyou"><p>朋友网</p></li>
+                                                <li class="-mob-share-tumblr"><p>Tumblr</p></li>
+                                                <li class="-mob-share-instapaper"><p>Instapaper</p></li>
+                                                <li class="-mob-share-linkedin"><p>LinkedIn</p></li>
+    </ul>
+    <div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<script id="-mob-share" src="https://f1.webshare.mob.com/code/mob-share.js?appkey=你的appkey"></script>
+<!--MOB SHARE END-->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://www.intensedebate.com?ref_noscript">comments powered by intensedebate.</a>
+        </noscript>
+        <script>
+              var idcomments_acct = '5f980fb685d9eca708e4ec93983b3255';
+              var idcomments_post_id;
+              var idcomments_post_url;
+          </script>
+          <span id="IDCommentsPostTitle" style="display:none"></span>
+          <script type='text/javascript' src='https://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+      </div>
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/upload/avator.jpg"
+                alt="gongxufan" />
+            
+              <p class="site-author-name" itemprop="name">gongxufan</p>
+              <p class="site-description motion-element" itemprop="description">技术分享</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一，准备工作"><span class="nav-number">2.</span> <span class="nav-text">一，准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二，项目结构"><span class="nav-number">3.</span> <span class="nav-text">二，项目结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三，准备构建"><span class="nav-number">4.</span> <span class="nav-text">三，准备构建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用IDEA打开项目"><span class="nav-number">4.1.</span> <span class="nav-text">使用IDEA打开项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置编译环境"><span class="nav-number">4.2.</span> <span class="nav-text">配置编译环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动工程"><span class="nav-number">4.3.</span> <span class="nav-text">启动工程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四，项目部署"><span class="nav-number">5.</span> <span class="nav-text">四，项目部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五，部署外部项目"><span class="nav-number">6.</span> <span class="nav-text">五，部署外部项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#end"><span class="nav-number">7.</span> <span class="nav-text">end</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">gongxufan</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">36.2k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('5');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("7Do3qJ6mAHsHtIzkulIOEglT-gzGzoHsz", "yCDRrJqGuDMB81YS6w0x7ugP");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
