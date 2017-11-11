@@ -82,14 +82,14 @@
 <meta name="description" content="python类继承初始化父类的注意事项。">
 <meta name="keywords" content="python2.x">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python2.7继承使用super初始化父类的坑">
+<meta property="og:title" content="Python2.7继承使用super初始化父类">
 <meta property="og:url" content="https://gongxufan.github.io/2017/11/01/python-2.7-super/index.html">
 <meta property="og:site_name" content="潇湘往事-Blog">
 <meta property="og:description" content="python类继承初始化父类的注意事项。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-11T01:53:44.216Z">
+<meta property="og:updated_time" content="2017-11-11T05:24:35.239Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python2.7继承使用super初始化父类的坑">
+<meta name="twitter:title" content="Python2.7继承使用super初始化父类">
 <meta name="twitter:description" content="python类继承初始化父类的注意事项。">
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <title>Python2.7继承使用super初始化父类的坑 | 潇湘往事-Blog</title>
+  <title>Python2.7继承使用super初始化父类 | 潇湘往事-Blog</title>
   
 
 
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python2.7继承使用super初始化父类的坑</h1>
+          <h1 class="post-title" itemprop="name headline">Python2.7继承使用super初始化父类</h1>
         
 
         <div class="post-meta">
@@ -366,7 +366,7 @@
 
           
           
-             <span id="/2017/11/01/python-2.7-super/" class="leancloud_visitors" data-flag-title="Python2.7继承使用super初始化父类的坑">
+             <span id="/2017/11/01/python-2.7-super/" class="leancloud_visitors" data-flag-title="Python2.7继承使用super初始化父类">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -391,7 +391,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  468 字
+                  463 字
                 </span>
               
 
@@ -448,8 +448,12 @@
 <p>super(Student, self).<strong>init</strong>(sex)<br> TypeError: super() argument 1 must be type, not classobj</p>
 </blockquote>
 <p>这里的区别就是经典类和新式类，其看下边的栗子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span>  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(self)</span>:</span>  </span><br><span class="line">        print(<span class="string">'called A.foo()'</span>)  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span>  </span><br><span class="line">    <span class="keyword">pass</span>  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span><span class="params">(A)</span>:</span>  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(self)</span>:</span>  </span><br><span class="line">        print(<span class="string">'called C.foo()'</span>)  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span><span class="params">(B, C)</span>:</span>  </span><br><span class="line">    <span class="keyword">pass</span>  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:  </span><br><span class="line">    d = D()  </span><br><span class="line">    d.foo()</span><br></pre></td></tr></table></figure></p>
-<p>运行：called A.foo()<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span>  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(self)</span>:</span>  </span><br><span class="line">        print(<span class="string">'called A.foo()'</span>)  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span>  </span><br><span class="line">    <span class="keyword">pass</span>  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span><span class="params">(A)</span>:</span>  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(self)</span>:</span>  </span><br><span class="line">        print(<span class="string">'called C.foo()'</span>)  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span><span class="params">(B, C&lt;span style=<span class="string">"color:#009900;"</span>&gt;,object&lt;/span&gt;)</span>:</span>  </span><br><span class="line">    <span class="keyword">pass</span>  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:  </span><br><span class="line">    d = D()  </span><br><span class="line">    d.foo()</span><br></pre></td></tr></table></figure></p>
-<p>运行：called C.foo()<br>可见在调用父类方法查找的时候顺不一样。经典类会从根部开始，新式类从最接近子类的位置开始匹配。</p>
+<p>运行：called A.foo()<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span>  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(self)</span>:</span>  </span><br><span class="line">        print(<span class="string">'called A.foo()'</span>)  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span>  </span><br><span class="line">    <span class="keyword">pass</span>  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span><span class="params">(A)</span>:</span>  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(self)</span>:</span>  </span><br><span class="line">        print(<span class="string">'called C.foo()'</span>)  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span><span class="params">(B, C,object)</span>:</span>  </span><br><span class="line">    <span class="keyword">pass</span>  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:  </span><br><span class="line">    d = D()  </span><br><span class="line">    d.foo()</span><br></pre></td></tr></table></figure></p>
+<p>运行：</p>
+<blockquote>
+<p>called C.foo()</p>
+</blockquote>
+<p>可见在调用父类方法查找的时候顺不一样。经典类会从根部开始，新式类从最接近子类的位置开始匹配。</p>
 
       
     </div>
@@ -499,7 +503,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://gongxufan.github.io/2017/11/01/python-2.7-super/" title="Python2.7继承使用super初始化父类的坑">https://gongxufan.github.io/2017/11/01/python-2.7-super/</a>
+    <a href="https://gongxufan.github.io/2017/11/01/python-2.7-super/" title="Python2.7继承使用super初始化父类">https://gongxufan.github.io/2017/11/01/python-2.7-super/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
