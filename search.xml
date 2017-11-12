@@ -138,9 +138,9 @@
         
         <tags>
             
-            <tag> servlet </tag>
-            
             <tag> tomcat </tag>
+            
+            <tag> servlet </tag>
             
         </tags>
         
