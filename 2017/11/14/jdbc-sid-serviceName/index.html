@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Java, 技术分享,Python,技术博客,Android,潇湘往事,gongxufan潇湘往事-Blog" />
+  <meta name="keywords" content="Oracle,JDBC," />
 
 
 
@@ -86,16 +86,18 @@
 
 
 
-<meta name="description" content="平凡而执着，简单而快乐。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="潇湘往事-Blog">
-<meta property="og:url" content="https://gongxufan.github.io/archives/2016/03/index.html">
+<meta name="description" content="使用PL/SQL可以正常访问数据库，但是在程序里使用jdbc无法获取连接。">
+<meta name="keywords" content="Oracle,JDBC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JDBC无法连接Oracle问题解决">
+<meta property="og:url" content="https://gongxufan.github.io/2017/11/14/jdbc-sid-serviceName/index.html">
 <meta property="og:site_name" content="潇湘往事-Blog">
-<meta property="og:description" content="平凡而执着，简单而快乐。">
+<meta property="og:description" content="使用PL/SQL可以正常访问数据库，但是在程序里使用jdbc无法获取连接。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-14T04:50:31.906Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="潇湘往事-Blog">
-<meta name="twitter:description" content="平凡而执着，简单而快乐。">
+<meta name="twitter:title" content="JDBC无法连接Oracle问题解决">
+<meta name="twitter:description" content="使用PL/SQL可以正常访问数据库，但是在程序里使用jdbc无法获取连接。">
 
 
 
@@ -125,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://gongxufan.github.io/archives/2016/03/"/>
+  <link rel="canonical" href="https://gongxufan.github.io/2017/11/14/jdbc-sid-serviceName/"/>
 
 
 
 
 
-  <title>归档 | 潇湘往事-Blog</title>
+  <title>JDBC无法连接Oracle问题解决 | 潇湘往事-Blog</title>
   
 
 
@@ -150,7 +152,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -288,74 +290,322 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
-
-      <span class="archive-page-counter">
-        
-        
-        
-          
-        
-        嗯..! 目前共计 24 篇日志。 继续努力。
-      </span>
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2016">2016</h1>
-          </div>
-        
-        
-
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://gongxufan.github.io/2017/11/14/jdbc-sid-serviceName/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="gongxufan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avator.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="潇湘往事-Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2016/03/10/merge-sort/" itemprop="url">
-              
-                <span itemprop="name">归并排序Java实现</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">JDBC无法连接Oracle问题解决</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-03-10T15:54:00+08:00"
-              content="2016-03-10" >
-          03-10
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-14T12:46:00+08:00">
+                2017-11-14
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作日志/" itemprop="url" rel="index">
+                    <span itemprop="name">工作日志</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/11/14/jdbc-sid-serviceName/" class="leancloud_visitors" data-flag-title="JDBC无法连接Oracle问题解决">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  705 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长≈</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  使用PL/SQL可以正常访问数据库，但是在程序里使用jdbc无法获取连接。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
+      
+        <h2 id="无法连接Oracle"><a href="#无法连接Oracle" class="headerlink" title="无法连接Oracle"></a>无法连接Oracle</h2><p>今天现场工程反应数据库从Oracle11g升级到12c后程序无法连接数据库，一直报错：</p>
+<blockquote>
+<p>Caused by: oracle.net.ns.NetException: Listener refused the connection with the following error: ORA-12505, TNS:listener does not currently know of SID given in connect descriptor     at oracle.net.ns.NSProtocol.connect(NSProtocol.java:395)     at oracle.jdbc.driver.T4CConnection.connect(T4CConnection.java:1102)     at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:320)     … 107 more</p>
+</blockquote>
+<p>显然是监听有问题，服务器无法识别jdbc传递的sid。下边是我的配置文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#db</span><br><span class="line">db.driverClassName=oracle.jdbc.driver.OracleDriver</span><br><span class="line">db.username=GEOSYS</span><br><span class="line">db.password=GEOSYS</span><br><span class="line">db.url=jdbc:oracle:thin:@192.168.199.109:1521:orcl</span><br><span class="line">db.maxTotal=500</span><br><span class="line">db.maxIdle=30</span><br></pre></td></tr></table></figure></p>
+<h2 id="问题排查"><a href="#问题排查" class="headerlink" title="问题排查"></a>问题排查</h2><p>查看网络是否连通，是否是驱动不兼容或者会</p>
+<h3 id="网络问题"><a href="#网络问题" class="headerlink" title="网络问题"></a>网络问题</h3><p>关闭防火墙，问题依然存在，接着使用ssh探测端口状态：<br><code>ssh -v -p  1521 root@192.168.199.109</code><br>结果网络是通的。</p>
+<h3 id="plsql"><a href="#plsql" class="headerlink" title="plsql"></a>plsql</h3><p>使用plsql可以访问数据库，难道是sid配置有问题？</p>
+<h3 id="查看数据库实例"><a href="#查看数据库实例" class="headerlink" title="查看数据库实例"></a>查看数据库实例</h3><p><code>select * from gv$instance;</code><br>发现存在多个实例，于是我怀疑配置里根本就不是sid而是一个服务名。果不其然，工程根本不知道sid和服务名的区别。但是估计应该是给的服务名，于是改jdbc的连接方式。</p>
+<h2 id="更换驱动"><a href="#更换驱动" class="headerlink" title="更换驱动"></a>更换驱动</h2><p>项目使用的ojdbc6的驱动包，而且运行环境是JDK8，于是换成最新的ojdbc7。最后还是出现无法解析SID的异常。</p>
+<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2><p>jdbc连接的两种方式：</p>
+<blockquote>
+<p>Oracle JDBC Thin using a ServiceName:<br>jdbc:oracle:thin:@//host:port/service_name</p>
+<p>Oracle JDBC Thin using an SID:<br>jdbc:oracle:thin:@host:port:SID</p>
+<p>Note:<br>Support for SID is being phased out. Oracle recommends that users switch over to usingservice names. </p>
+</blockquote>
+<p>而且确认了现场数据库有三个实例，所以马上采用服务名的连接方式:<br><code>db.url=jdbc:oracle:thin:@//192.168.199.109:1521/orcl</code><br>重启服务一切正常。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>一段官方的解释最合适不过。</p>
+<blockquote>
+<p>What is the difference between Oracle SIDs and Oracle SERVICE NAMES. One config tool looks for SERVICE NAME and then the next looks for SIDs! What’s going on?!</p>
+<p>Oracle SID is the unique name that uniquely identifies your instance/database where as Service name is the TNS alias that you give when you remotely connect to your database and this Service name is recorded in Tnsnames.ora file on your clients and it can be the same as SID and you can also give it any other name you want.</p>
+<p>SERVICE_NAME is the new feature from oracle 8i onwards in which database can register itself with listener. If database is registered with listener in this way then you can use SERVICE_NAME parameter in tnsnames.ora otherwise - use SID in tnsnames.ora.</p>
+<p>Also if you have OPS (RAC) you will have different SERVICE_NAME for each instance.</p>
+<p>SERVICE_NAMES specifies one or more names for the database service to which this instance connects. You can specify multiple services names in order to distinguish among different uses of the same database. For example:<br>SERVICE_NAMES = sales.acme.com, widgetsales.acme.com</p>
+<p>You can also use service names to identify a single service that is available from two different databases through the use of replication.</p>
+<p>In an Oracle Parallel Server environment, you must set this parameter for every instance.<br>`</p>
+</blockquote>
+
+      
     </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创，看官随意。</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/upload/images/wechatpay.jpeg" alt="gongxufan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/upload/images/alipay.jpeg" alt="gongxufan 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    gongxufan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://gongxufan.github.io/2017/11/14/jdbc-sid-serviceName/" title="JDBC无法连接Oracle问题解决">https://gongxufan.github.io/2017/11/14/jdbc-sid-serviceName/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Oracle/" rel="tag"># Oracle</a>
+          
+            <a href="/tags/JDBC/" rel="tag"># JDBC</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/10/hexo-word-count/" rel="next" title="hexo使用next主题统计文章字符和阅读时长">
+                <i class="fa fa-chevron-left"></i> hexo使用next主题统计文章字符和阅读时长
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div style="margin-top: 20px;text-align: center;">
+      
+        <!--MOB SHARE BEGIN-->
+<div class="-mob-share-ui-button -mob-share-open">分享本文</div>
+<div class="-mob-share-ui" style="display: none">
+    <ul class="-mob-share-list">
+        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+                                                <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+                                                <li class="-mob-share-qzone"><p>QQ空间</p></li>
+                                                <li class="-mob-share-qq"><p>QQ好友</p></li>
+                                                <li class="-mob-share-weixin"><p>微信</p></li>
+                                                <li class="-mob-share-douban"><p>豆瓣</p></li>
+                                                <li class="-mob-share-renren"><p>人人网</p></li>
+                                                <li class="-mob-share-kaixin"><p>开心网</p></li>
+                                                <li class="-mob-share-facebook"><p>Facebook</p></li>
+                                                <li class="-mob-share-twitter"><p>Twitter</p></li>
+                                                <li class="-mob-share-pocket"><p>Pocket</p></li>
+                                                <li class="-mob-share-google"><p>Google+</p></li>
+                                                <li class="-mob-share-youdao"><p>有道云笔记</p></li>
+                                                <li class="-mob-share-mingdao"><p>明道</p></li>
+                                                <li class="-mob-share-pengyou"><p>朋友网</p></li>
+                                                <li class="-mob-share-tumblr"><p>Tumblr</p></li>
+                                                <li class="-mob-share-instapaper"><p>Instapaper</p></li>
+                                                <li class="-mob-share-linkedin"><p>LinkedIn</p></li>
+    </ul>
+    <div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<script id="-mob-share" src="https://f1.webshare.mob.com/code/mob-share.js?appkey=你的appkey"></script>
+<!--MOB SHARE END-->
+
+      
+    </div>
+  </div>
 
 
           </div>
@@ -363,6 +613,26 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://www.intensedebate.com?ref_noscript">comments powered by intensedebate.</a>
+        </noscript>
+        <script>
+              var idcomments_acct = '5f980fb685d9eca708e4ec93983b3255';
+              var idcomments_post_id;
+              var idcomments_post_url;
+          </script>
+          <span id="IDCommentsPostTitle" style="display:none"></span>
+          <script type='text/javascript' src='https://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+      </div>
+    </div>
+  
+
+
 
         </div>
         
@@ -385,8 +655,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -470,6 +749,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#无法连接Oracle"><span class="nav-number">1.</span> <span class="nav-text">无法连接Oracle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题排查"><span class="nav-number">2.</span> <span class="nav-text">问题排查</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网络问题"><span class="nav-number">2.1.</span> <span class="nav-text">网络问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#plsql"><span class="nav-number">2.2.</span> <span class="nav-text">plsql</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看数据库实例"><span class="nav-number">2.3.</span> <span class="nav-text">查看数据库实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更换驱动"><span class="nav-number">3.</span> <span class="nav-text">更换驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题解决"><span class="nav-number">4.</span> <span class="nav-text">问题解决</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -628,6 +923,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
