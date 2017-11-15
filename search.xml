@@ -461,6 +461,7 @@
 <h2 id="查看硬件信息并保存到html文件"><a href="#查看硬件信息并保存到html文件" class="headerlink" title="查看硬件信息并保存到html文件"></a>查看硬件信息并保存到html文件</h2><p><code>sudo lshw -html &gt; ~/hw.html</code></p>
 <h2 id="安装numpy"><a href="#安装numpy" class="headerlink" title="安装numpy"></a>安装numpy</h2><p>for python3+<br><code>sudo apt-get install python3-numpy python3-scipy python3-matplotlib ipython3 ipython3-notebook python3-pandas python-sympy python3-nose</code></p>
 <p>for python2+<br><code>sudo apt-get install python-numpy python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose</code></p>
+<h2 id="禁用笔记本触摸板"><a href="#禁用笔记本触摸板" class="headerlink" title="禁用笔记本触摸板"></a>禁用笔记本触摸板</h2><p>禁用 sudo rmmod psmouse<br>开启 sudo modprobe psmouse<br>注意这里执行禁用会把触点功能也关闭，如果只禁用触摸板的可以安装pointing-device</p>
 ]]></content>
       
         <categories>

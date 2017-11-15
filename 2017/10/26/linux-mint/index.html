@@ -95,7 +95,7 @@
 <meta property="og:description" content="记录linux-mint系统使用笔记。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://gongxufan.github.io/upload/images/linux/source.png">
-<meta property="og:updated_time" content="2017-11-10T15:16:46.116Z">
+<meta property="og:updated_time" content="2017-11-15T09:44:22.756Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux mint作为开发机的日常使用记录，持续更新">
 <meta name="twitter:description" content="记录linux-mint系统使用笔记。">
@@ -412,7 +412,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,365 字
+                  1,415 字
                 </span>
               
 
@@ -478,6 +478,7 @@
 <h2 id="查看硬件信息并保存到html文件"><a href="#查看硬件信息并保存到html文件" class="headerlink" title="查看硬件信息并保存到html文件"></a>查看硬件信息并保存到html文件</h2><p><code>sudo lshw -html &gt; ~/hw.html</code></p>
 <h2 id="安装numpy"><a href="#安装numpy" class="headerlink" title="安装numpy"></a>安装numpy</h2><p>for python3+<br><code>sudo apt-get install python3-numpy python3-scipy python3-matplotlib ipython3 ipython3-notebook python3-pandas python-sympy python3-nose</code></p>
 <p>for python2+<br><code>sudo apt-get install python-numpy python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose</code></p>
+<h2 id="禁用笔记本触摸板"><a href="#禁用笔记本触摸板" class="headerlink" title="禁用笔记本触摸板"></a>禁用笔记本触摸板</h2><p>禁用 sudo rmmod psmouse<br>开启 sudo modprobe psmouse<br>注意这里执行禁用会把触点功能也关闭，如果只禁用触摸板的可以安装pointing-device</p>
 
       
     </div>
@@ -779,7 +780,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置软件源"><span class="nav-number">1.</span> <span class="nav-text">配置软件源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中文输入法问题"><span class="nav-number">2.</span> <span class="nav-text">中文输入法问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装java"><span class="nav-number">3.</span> <span class="nav-text">安装java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装网易云音乐"><span class="nav-number">4.</span> <span class="nav-text">安装网易云音乐</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装解码和flash插件"><span class="nav-number">5.</span> <span class="nav-text">安装解码和flash插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装MySQL"><span class="nav-number">6.</span> <span class="nav-text">安装MySQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装chrome"><span class="nav-number">7.</span> <span class="nav-text">安装chrome</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Android-Studio"><span class="nav-number">8.</span> <span class="nav-text">安装Android Studio</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开机挂在文件系统"><span class="nav-number">9.</span> <span class="nav-text">开机挂在文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#home目录下模板目录的管理"><span class="nav-number">10.</span> <span class="nav-text">home目录下模板目录的管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看硬件信息并保存到html文件"><span class="nav-number">11.</span> <span class="nav-text">查看硬件信息并保存到html文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装numpy"><span class="nav-number">12.</span> <span class="nav-text">安装numpy</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置软件源"><span class="nav-number">1.</span> <span class="nav-text">配置软件源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中文输入法问题"><span class="nav-number">2.</span> <span class="nav-text">中文输入法问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装java"><span class="nav-number">3.</span> <span class="nav-text">安装java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装网易云音乐"><span class="nav-number">4.</span> <span class="nav-text">安装网易云音乐</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装解码和flash插件"><span class="nav-number">5.</span> <span class="nav-text">安装解码和flash插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装MySQL"><span class="nav-number">6.</span> <span class="nav-text">安装MySQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装chrome"><span class="nav-number">7.</span> <span class="nav-text">安装chrome</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Android-Studio"><span class="nav-number">8.</span> <span class="nav-text">安装Android Studio</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开机挂在文件系统"><span class="nav-number">9.</span> <span class="nav-text">开机挂在文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#home目录下模板目录的管理"><span class="nav-number">10.</span> <span class="nav-text">home目录下模板目录的管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看硬件信息并保存到html文件"><span class="nav-number">11.</span> <span class="nav-text">查看硬件信息并保存到html文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装numpy"><span class="nav-number">12.</span> <span class="nav-text">安装numpy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#禁用笔记本触摸板"><span class="nav-number">13.</span> <span class="nav-text">禁用笔记本触摸板</span></a></li></ol></div>
             
 
           </div>
