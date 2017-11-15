@@ -96,7 +96,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://gongxufan.github.io/upload/images/spring/spring-data-jpa-dir.png">
 <meta property="og:image" content="https://gongxufan.github.io/upload/images/spring/spring-boot-dir.png">
-<meta property="og:updated_time" content="2017-11-14T10:21:24.325Z">
+<meta property="og:updated_time" content="2017-11-15T01:06:25.184Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于spring-boot&amp;spring-data-jpa的web开发环境集成">
 <meta name="twitter:description" content="搭建基于spring-boot和spring-data-jpa进行开发的项目骨架。">
@@ -413,7 +413,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,379 字
+                  4,695 字
                 </span>
               
 
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">阅读时长≈</span>
                 
                 <span title="阅读时长">
-                  22 分钟
+                  24 分钟
                 </span>
               
             </div>
@@ -493,283 +493,12 @@
 <h3 id="jpa补充"><a href="#jpa补充" class="headerlink" title="jpa补充"></a>jpa补充</h3><p>使用JPA进行单表操作确实很方便，但是对于多表连接的复杂查询可能不太方便。一般有两种方式弥补这个不足：</p>
 <ol>
 <li>一个是在Query里标注为NativeQuery，直接使用原生SQL。不过这种方式在动态参数查询到额情况下很不方便，这时候我们需要按条件拼接SQL。</li>
-<li>自定义DAO<br>``java<br>package gxf.dev.topology.repository;</li>
-</ol>
-<p>import com.mysql.jdbc.StringUtils;<br>import org.hibernate.SQLQuery;<br>import org.hibernate.criterion.CriteriaSpecification;<br>import org.springframework.beans.factory.annotation.Autowired;<br>import org.springframework.stereotype.Component;</p>
-<p>import javax.persistence.EntityManager;<br>import javax.persistence.EntityManagerFactory;<br>import javax.persistence.Query;<br>import java.math.BigDecimal;<br>import java.util.ArrayList;<br>import java.util.List;<br>import java.util.Map;<br>import java.util.regex.Matcher;<br>import java.util.regex.Pattern;</p>
-<p>/**</p>
-<ul>
-<li>支持自定义SQL查询</li>
-<li><p>Created by gongxufan on 2017/3/17.<br>*/<br>@Component<br>public class CustomSqlDao {<br> @Autowired<br> private EntityManagerFactory entityManagerFactory;</p>
-<p> public int getMaxColumn(final String filedName, final String tableName) {</p>
-<pre><code>String sql = &quot;select nvl(max(&quot; + filedName + &quot;), 0)  as max_num from &quot; + tableName;
-Map map =  entityManagerFactory.getProperties();
-String dialect = (String) map.get(&quot;hibernate.dialect&quot;);
-//determine which database use
-if(!StringUtils.isNullOrEmpty(dialect)){
-    if(dialect.contains(&quot;MySQL&quot;)){
-        sql = &quot;select ifnull(max(&quot; + filedName + &quot;), 0)  as max_num from &quot; + tableName;
-    }
-    if(dialect.contains(&quot;Oracle&quot;)){
-        sql = &quot;select nvl(max(&quot; + filedName + &quot;), 0)  as max_num from &quot; + tableName;
-    }
-}
-int maxID = 0;
-List&lt;Map&lt;String, Object&gt;&gt; list = this.querySqlObjects(sql);
-if (list.size() &gt; 0) {
-    Object maxNum = list.get(0).get(&quot;max_num&quot;);
-    if(maxNum instanceof Number)
-        maxID = ((Number)maxNum).intValue();
-    if(maxNum instanceof String)
-        maxID = Integer.valueOf((String)maxNum);
-}
-return maxID + 1;
-</code></pre><p> }</p>
-<p> public List<map<string, object="">&gt; querySqlObjects(String sql, Integer currentPage, Integer rowsInPage) {</map<string,></p>
-<pre><code>return this.querySqlObjects(sql, null, currentPage, rowsInPage);
-</code></pre><p> }</p>
-<p> public List<map<string, object="">&gt; querySqlObjects(String sql) {</map<string,></p>
-<pre><code>return this.querySqlObjects(sql, null, null, null);
-</code></pre><p> }</p>
-<p> public List<map<string, object="">&gt; querySqlObjects(String sql, Map params) {</map<string,></p>
-<pre><code>return this.querySqlObjects(sql, params, null, null);
-</code></pre><p> }</p>
-<p> @SuppressWarnings(“unchecked”)<br> public List<map<string, object="">&gt; querySqlObjects(String sql, Object params, Integer currentPage, Integer rowsInPage) {</map<string,></p>
-<pre><code>EntityManager entityManager = entityManagerFactory.createEntityManager();
-Query qry = entityManager.createNativeQuery(sql);
-SQLQuery s = qry.unwrap(SQLQuery.class);
-
-//设置参数
-if (params != null) {
-    if (params instanceof List) {
-        List&lt;Object&gt; paramList = (List&lt;Object&gt;) params;
-        for (int i = 0, size = paramList.size(); i &lt; size; i++) {
-            qry.setParameter(i + 1, paramList.get(i));
-        }
-    } else if (params instanceof Map) {
-        Map&lt;String, Object&gt; paramMap = (Map&lt;String, Object&gt;) params;
-        Object o = null;
-        for (String key : paramMap.keySet()) {
-            o = paramMap.get(key);
-            if (o != null)
-                qry.setParameter(key, o);
-        }
-    }
-}
-
-if (currentPage != null &amp;&amp; rowsInPage != null) {//判断是否有分页
-    // 起始对象位置
-    qry.setFirstResult(rowsInPage * (currentPage - 1));
-    // 查询对象个数
-    qry.setMaxResults(rowsInPage);
-}
-s.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
-List&lt;Map&lt;String, Object&gt;&gt; resultList = new ArrayList&lt;Map&lt;String, Object&gt;&gt;();
-try {
-    List list = qry.getResultList();
-    resultList = s.list();
-} catch (Exception e) {
-    e.printStackTrace();
-} finally {
-    entityManager.close();
-}
-return resultList;
-</code></pre><p> }</p>
+<li>自定义DAO<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> gxf.dev.topology.repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.mysql.jdbc.StringUtils;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.SQLQuery;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.criterion.CriteriaSpecification;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.EntityManager;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.EntityManagerFactory;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Query;</span><br><span class="line"><span class="keyword">import</span> java.math.BigDecimal;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Matcher;</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 支持自定义SQL查询</span></span><br><span class="line"><span class="comment"> * Created by gongxufan on 2017/3/17.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomSqlDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> EntityManagerFactory entityManagerFactory;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getMaxColumn</span><span class="params">(<span class="keyword">final</span> String filedName, <span class="keyword">final</span> String tableName)</span> </span>&#123;</span><br><span class="line">        String sql = <span class="string">"select nvl(max("</span> + filedName + <span class="string">"), 0)  as max_num from "</span> + tableName;</span><br><span class="line">        Map map =  entityManagerFactory.getProperties();</span><br><span class="line">        String dialect = (String) map.get(<span class="string">"hibernate.dialect"</span>);</span><br><span class="line">        <span class="comment">//determine which database use</span></span><br><span class="line">        <span class="keyword">if</span>(!StringUtils.isNullOrEmpty(dialect))&#123;</span><br><span class="line">            <span class="keyword">if</span>(dialect.contains(<span class="string">"MySQL"</span>))&#123;</span><br><span class="line">                sql = <span class="string">"select ifnull(max("</span> + filedName + <span class="string">"), 0)  as max_num from "</span> + tableName;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(dialect.contains(<span class="string">"Oracle"</span>))&#123;</span><br><span class="line">                sql = <span class="string">"select nvl(max("</span> + filedName + <span class="string">"), 0)  as max_num from "</span> + tableName;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> maxID = <span class="number">0</span>;</span><br><span class="line">        List&lt;Map&lt;String, Object&gt;&gt; list = <span class="keyword">this</span>.querySqlObjects(sql);</span><br><span class="line">        <span class="keyword">if</span> (list.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            Object maxNum = list.get(<span class="number">0</span>).get(<span class="string">"max_num"</span>);</span><br><span class="line">            <span class="keyword">if</span>(maxNum <span class="keyword">instanceof</span> Number)</span><br><span class="line">                maxID = ((Number)maxNum).intValue();</span><br><span class="line">            <span class="keyword">if</span>(maxNum <span class="keyword">instanceof</span> String)</span><br><span class="line">                maxID = Integer.valueOf((String)maxNum);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxID + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;Map&lt;String, Object&gt;&gt; querySqlObjects(String sql, Integer currentPage, Integer rowsInPage) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.querySqlObjects(sql, <span class="keyword">null</span>, currentPage, rowsInPage);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;Map&lt;String, Object&gt;&gt; querySqlObjects(String sql) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.querySqlObjects(sql, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;Map&lt;String, Object&gt;&gt; querySqlObjects(String sql, Map params) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.querySqlObjects(sql, params, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    <span class="keyword">public</span> List&lt;Map&lt;String, Object&gt;&gt; querySqlObjects(String sql, Object params, Integer currentPage, Integer rowsInPage) &#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        Query qry = entityManager.createNativeQuery(sql);</span><br><span class="line">        SQLQuery s = qry.unwrap(SQLQuery.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置参数</span></span><br><span class="line">        <span class="keyword">if</span> (params != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (params <span class="keyword">instanceof</span> List) &#123;</span><br><span class="line">                List&lt;Object&gt; paramList = (List&lt;Object&gt;) params;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, size = paramList.size(); i &lt; size; i++) &#123;</span><br><span class="line">                    qry.setParameter(i + <span class="number">1</span>, paramList.get(i));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (params <span class="keyword">instanceof</span> Map) &#123;</span><br><span class="line">                Map&lt;String, Object&gt; paramMap = (Map&lt;String, Object&gt;) params;</span><br><span class="line">                Object o = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">for</span> (String key : paramMap.keySet()) &#123;</span><br><span class="line">                    o = paramMap.get(key);</span><br><span class="line">                    <span class="keyword">if</span> (o != <span class="keyword">null</span>)</span><br><span class="line">                        qry.setParameter(key, o);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (currentPage != <span class="keyword">null</span> &amp;&amp; rowsInPage != <span class="keyword">null</span>) &#123;<span class="comment">//判断是否有分页</span></span><br><span class="line">            <span class="comment">// 起始对象位置</span></span><br><span class="line">            qry.setFirstResult(rowsInPage * (currentPage - <span class="number">1</span>));</span><br><span class="line">            <span class="comment">// 查询对象个数</span></span><br><span class="line">            qry.setMaxResults(rowsInPage);</span><br><span class="line">        &#125;</span><br><span class="line">        s.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);</span><br><span class="line">        List&lt;Map&lt;String, Object&gt;&gt; resultList = <span class="keyword">new</span> ArrayList&lt;Map&lt;String, Object&gt;&gt;();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            List list = qry.getResultList();</span><br><span class="line">            resultList = s.list();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            entityManager.close();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> resultList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">(String sql)</span> </span>&#123;</span><br><span class="line">        String sqlCount = <span class="string">"select count(0) as count_num from "</span> + sql;</span><br><span class="line">        List&lt;Map&lt;String, Object&gt;&gt; list = <span class="keyword">this</span>.querySqlObjects(sqlCount);</span><br><span class="line">        <span class="keyword">if</span> (list.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> countNum = ((BigDecimal) list.get(<span class="number">0</span>).get(<span class="string">"COUNT_NUM"</span>)).intValue();</span><br><span class="line">            <span class="keyword">return</span> countNum;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理sql语句</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> _strSql</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toSql</span><span class="params">(String _strSql)</span> </span>&#123;</span><br><span class="line">        String strNewSql = _strSql;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (strNewSql != <span class="keyword">null</span>) &#123;</span><br><span class="line">            strNewSql = regReplace(<span class="string">"'"</span>, <span class="string">"''"</span>, strNewSql);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            strNewSql = <span class="string">""</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> strNewSql;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">regReplace</span><span class="params">(String strFind, String strReplacement, String strOld)</span> </span>&#123;</span><br><span class="line">        String strNew = strOld;</span><br><span class="line">        Pattern p = <span class="keyword">null</span>;</span><br><span class="line">        Matcher m = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            p = Pattern.compile(strFind);</span><br><span class="line">            m = p.matcher(strOld);</span><br><span class="line">            strNew = m.replaceAll(strReplacement);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> strNew;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据hql语句查询数据</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> hql</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"rawtypes"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">queryForList</span><span class="params">(String hql, List&lt;Object&gt; params)</span> </span>&#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        Query query = entityManager.createQuery(hql);</span><br><span class="line">        List list = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (params != <span class="keyword">null</span> &amp;&amp; !params.isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, size = params.size(); i &lt; size; i++) &#123;</span><br><span class="line">                    query.setParameter(i + <span class="number">1</span>, params.get(i));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            list = query.getResultList();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            entityManager.close();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"rawtypes"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">queryByMapParams</span><span class="params">(String hql, Map&lt;String, Object&gt; params, Integer currentPage, Integer pageSize)</span> </span>&#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        Query query = entityManager.createQuery(hql);</span><br><span class="line">        List list = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (params != <span class="keyword">null</span> &amp;&amp; !params.isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; entry : params.entrySet()) &#123;</span><br><span class="line">                    query.setParameter(entry.getKey(), entry.getValue());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (currentPage != <span class="keyword">null</span> &amp;&amp; pageSize != <span class="keyword">null</span>) &#123;</span><br><span class="line">                query.setFirstResult((currentPage - <span class="number">1</span>) * pageSize);</span><br><span class="line">                query.setMaxResults(pageSize);</span><br><span class="line">            &#125;</span><br><span class="line">            list = query.getResultList();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            entityManager.close();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"rawtypes"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">queryByMapParams</span><span class="params">(String hql, Map&lt;String, Object&gt; params)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> queryByMapParams(hql, params, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"rawtypes"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">queryForList</span><span class="params">(String hql)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> queryForList(hql, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询总数</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> hql</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> params</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">queryCount</span><span class="params">(String hql, Map&lt;String, Object&gt; params)</span> </span>&#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        Query query = entityManager.createQuery(hql);</span><br><span class="line">        Long count = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (params != <span class="keyword">null</span> &amp;&amp; !params.isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; entry : params.entrySet()) &#123;</span><br><span class="line">                    query.setParameter(entry.getKey(), entry.getValue());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            count = (Long) query.getSingleResult();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            entityManager.close();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询总数</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> sql</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> params</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">queryCountBySql</span><span class="params">(String sql, Map&lt;String, Object&gt; params)</span> </span>&#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        Integer count = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Query query = entityManager.createNativeQuery(sql);</span><br><span class="line">            <span class="keyword">if</span> (params != <span class="keyword">null</span> &amp;&amp; !params.isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; entry : params.entrySet()) &#123;</span><br><span class="line">                    query.setParameter(entry.getKey(), entry.getValue());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Object obj = query.getSingleResult();</span><br><span class="line">            <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> BigDecimal) &#123;</span><br><span class="line">                count = ((BigDecimal) obj).intValue();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                count = (Integer) obj;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (entityManager != <span class="keyword">null</span>) &#123;</span><br><span class="line">                entityManager.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * select count(*) from table</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> sql</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> params</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">executeSql</span><span class="params">(String sql, List&lt;Object&gt; params)</span> </span>&#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Query query = entityManager.createNativeQuery(sql);</span><br><span class="line">            <span class="keyword">if</span> (params != <span class="keyword">null</span> &amp;&amp; !params.isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, size = params.size(); i &lt; size; i++) &#123;</span><br><span class="line">                    query.setParameter(i + <span class="number">1</span>, params.get(i));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> query.executeUpdate();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (entityManager != <span class="keyword">null</span>) &#123;</span><br><span class="line">                entityManager.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<pre><code>public int getCount(String sql) {
-    String sqlCount = &quot;select count(0) as count_num from &quot; + sql;
-    List&lt;Map&lt;String, Object&gt;&gt; list = this.querySqlObjects(sqlCount);
-    if (list.size() &gt; 0) {
-        int countNum = ((BigDecimal) list.get(0).get(&quot;COUNT_NUM&quot;)).intValue();
-        return countNum;
-    } else {
-        return 0;
-    }
-}
-
-/**
- * 处理sql语句
- *
- * @param _strSql
- * @return
- */
-public String toSql(String _strSql) {
-    String strNewSql = _strSql;
-
-    if (strNewSql != null) {
-        strNewSql = regReplace(&quot;&apos;&quot;, &quot;&apos;&apos;&quot;, strNewSql);
-    } else {
-        strNewSql = &quot;&quot;;
-    }
-
-    return strNewSql;
-}
-
-private String regReplace(String strFind, String strReplacement, String strOld) {
-    String strNew = strOld;
-    Pattern p = null;
-    Matcher m = null;
-    try {
-        p = Pattern.compile(strFind);
-        m = p.matcher(strOld);
-        strNew = m.replaceAll(strReplacement);
-    } catch (Exception e) {
-    }
-
-    return strNew;
-}
-
-/**
- * 根据hql语句查询数据
- *
- * @param hql
- * @return
- */
-@SuppressWarnings(&quot;rawtypes&quot;)
-public List queryForList(String hql, List&lt;Object&gt; params) {
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
-    Query query = entityManager.createQuery(hql);
-    List list = null;
-    try {
-        if (params != null &amp;&amp; !params.isEmpty()) {
-            for (int i = 0, size = params.size(); i &lt; size; i++) {
-                query.setParameter(i + 1, params.get(i));
-            }
-        }
-        list = query.getResultList();
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        entityManager.close();
-    }
-    return list;
-}
-
-@SuppressWarnings(&quot;rawtypes&quot;)
-public List queryByMapParams(String hql, Map&lt;String, Object&gt; params, Integer currentPage, Integer pageSize) {
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
-    Query query = entityManager.createQuery(hql);
-    List list = null;
-    try {
-        if (params != null &amp;&amp; !params.isEmpty()) {
-            for (Map.Entry&lt;String, Object&gt; entry : params.entrySet()) {
-                query.setParameter(entry.getKey(), entry.getValue());
-            }
-        }
-
-        if (currentPage != null &amp;&amp; pageSize != null) {
-            query.setFirstResult((currentPage - 1) * pageSize);
-            query.setMaxResults(pageSize);
-        }
-        list = query.getResultList();
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        entityManager.close();
-    }
-
-    return list;
-}
-
-@SuppressWarnings(&quot;rawtypes&quot;)
-public List queryByMapParams(String hql, Map&lt;String, Object&gt; params) {
-    return queryByMapParams(hql, params, null, null);
-}
-
-@SuppressWarnings(&quot;rawtypes&quot;)
-public List queryForList(String hql) {
-    return queryForList(hql, null);
-}
-
-
-/**
- * 查询总数
- *
- * @param hql
- * @param params
- * @return
- */
-public Long queryCount(String hql, Map&lt;String, Object&gt; params) {
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
-    Query query = entityManager.createQuery(hql);
-    Long count = null;
-    try {
-        if (params != null &amp;&amp; !params.isEmpty()) {
-            for (Map.Entry&lt;String, Object&gt; entry : params.entrySet()) {
-                query.setParameter(entry.getKey(), entry.getValue());
-            }
-        }
-        count = (Long) query.getSingleResult();
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        entityManager.close();
-    }
-
-    return count;
-}
-
-/**
- * 查询总数
- *
- * @param sql
- * @param params
- * @return
- */
-public Integer queryCountBySql(String sql, Map&lt;String, Object&gt; params) {
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
-    Integer count = null;
-    try {
-        Query query = entityManager.createNativeQuery(sql);
-        if (params != null &amp;&amp; !params.isEmpty()) {
-            for (Map.Entry&lt;String, Object&gt; entry : params.entrySet()) {
-                query.setParameter(entry.getKey(), entry.getValue());
-            }
-        }
-
-        Object obj = query.getSingleResult();
-        if (obj instanceof BigDecimal) {
-            count = ((BigDecimal) obj).intValue();
-        } else {
-            count = (Integer) obj;
-        }
-
-    } finally {
-        if (entityManager != null) {
-            entityManager.close();
-        }
-    }
-    return count;
-}
-
-/**
- * select count(*) from table
- *
- * @param sql
- * @param params
- * @return
- */
-public int executeSql(String sql, List&lt;Object&gt; params) {
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
-    try {
-        Query query = entityManager.createNativeQuery(sql);
-        if (params != null &amp;&amp; !params.isEmpty()) {
-            for (int i = 0, size = params.size(); i &lt; size; i++) {
-                query.setParameter(i + 1, params.get(i));
-            }
-        }
-        return query.executeUpdate();
-    } finally {
-        if (entityManager != null) {
-            entityManager.close();
-        }
-    }
-}
-</code></pre><p>}</p>
-<p>```<br>我们在service层注入，然后就可以根据输入条件拼接好sql或者hql来进行各种操作。这种方式灵活而且也不需要手动写分代码，使用hibernate封装好的机制即可。</p>
+</ol>
+<p>我们在service层注入，然后就可以根据输入条件拼接好sql或者hql来进行各种操作。这种方式灵活而且也不需要手动写分代码，使用hibernate封装好的机制即可。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用boot可以快速搭建一个前后端开发的骨架，里面有很多自动的配置和约定。虽然boot不是新的一个技术栈，但是它要求我们对各个组件都要比较熟悉，不然对它的运行机制和约定配置会感到很困惑。而使用JPA进行数据库操作也是利弊参半，需要自己权衡。</p>
-<p>项目代码：</p>
+<p>项目代码：<a href="https://github.com/gongxufan/spring-boot-jpa-dev" target="_blank" rel="external">https://github.com/gongxufan/spring-boot-jpa-dev</a></p>
 
       
     </div>
@@ -1103,7 +832,7 @@ public int executeSql(String sql, List&lt;Object&gt; params) {
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">41.3k</span>
+    <span title="Site words total count">41.6k</span>
   
 </div>
 
