@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,spring," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="搭建基于spring-boot和spring-data-jpa进行开发的项目骨架。">
+<meta name="keywords" content="java,spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于spring-boot&amp;spring-data-jpa的web开发环境集成">
+<meta property="og:url" content="https://gongxufan.github.io/2016/11/14/spring-boot-data-jpa-project/index.html">
+<meta property="og:site_name" content="潇湘往事-Blog">
+<meta property="og:description" content="搭建基于spring-boot和spring-data-jpa进行开发的项目骨架。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/spring/spring-data-jpa-dir.png">
+<meta property="og:image" content="https://gongxufan.github.io/upload/images/spring/spring-boot-dir.png">
+<meta property="og:updated_time" content="2017-12-01T01:13:15.081Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于spring-boot&amp;spring-data-jpa的web开发环境集成">
+<meta name="twitter:description" content="搭建基于spring-boot和spring-data-jpa进行开发的项目骨架。">
+<meta name="twitter:image" content="https://gongxufan.github.io/upload/images/spring/spring-data-jpa-dir.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://gongxufan.github.io/2016/11/14/spring-boot-data-jpa-project/"/>
+
+
+
+
+
+  <title>基于spring-boot&spring-data-jpa的web开发环境集成 | 潇湘往事-Blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cc25ff857320d97b4a5ac817b3992810";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">潇湘往事-Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"><p>&nbsp;&nbsp;&nbsp;<sup><strong>"Simplicity is prerequisite for reliability."</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <em>Edsger Dijkstra</em></sup></p></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            站内搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://gongxufan.github.io/2016/11/14/spring-boot-data-jpa-project/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="gongxufan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/upload/avator.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="潇湘往事-Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于spring-boot&spring-data-jpa的web开发环境集成</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-14T18:21:00+08:00">
+                2016-11-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作日志/" itemprop="url" rel="index">
+                    <span itemprop="name">工作日志</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2016/11/14/spring-boot-data-jpa-project/" class="leancloud_visitors" data-flag-title="基于spring-boot&spring-data-jpa的web开发环境集成">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,671 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长≈</span>
+                
+                <span title="阅读时长">
+                  24 分钟
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  搭建基于spring-boot和spring-data-jpa进行开发的项目骨架。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="新技术？"><a href="#新技术？" class="headerlink" title="新技术？"></a>新技术？</h2><p>spring-boot并不是全新的技术栈，而是整合了spring的很多组件，并且以约定优先的原则进行组合。使用boot我们不需要对冗杂的配置文件进行管理，主需要用它的注解便可启用大部分web开发中所需要的功能。本篇就是基于boot来配置jpa和静态文件访问，进行web应用的开发。</p>
+<h2 id="模板or静态页面"><a href="#模板or静态页面" class="headerlink" title="模板or静态页面"></a>模板or静态页面</h2><p>最原始的jsp页面在springboot中已经不在默认支持，spring-boot默认使用thymeleaf最为模板。当然我们也可以使用freemark或者velocity等其他后端模板。但是按照前后端分离的良好设计，我们最好采用静态页面作为前端模板，这样前后端完全分离，把数据处理逻辑写在程序并提供接口供前端调用。这样的设计更加灵活和清晰。</p>
+<h2 id="项目搭建"><a href="#项目搭建" class="headerlink" title="项目搭建"></a>项目搭建</h2><p>我们将讨论项目的结构、application配置文件、静态页面处理、自定义filter，listener,servlet以及拦截器的使用。最后集中讨论jpa的配置和操作以及如何进行单元测试和打包部署。</p>
+<h3 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h3><p>项目使用maven进行依赖管理和构建，整体结构如下图所示：<br><img src="/upload/images/spring/spring-data-jpa-dir.png" alt="img"><br>我们的HTML页面和资源文件都在resources/static下，打成jar包的时候static目录位于/BOOT-INF/classes/。</p>
+<h4 id="pom-xml"><a href="#pom-xml" class="headerlink" title="pom.xml"></a>pom.xml</h4><p>我们需要依赖下面这些包：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>gxf.dev<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>topology<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.5.6.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.tomcat<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>tomcat-jdbc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.zaxxer<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>HikariCP<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!--test--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.3.10.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus-aliyun<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>Nexus aliyun<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">layout</span>&gt;</span>default<span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>false<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">releases</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">releases</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">mainClass</span>&gt;</span>gxf.dev.topology.Application<span class="tag">&lt;/<span class="name">mainClass</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">goal</span>&gt;</span>repackage<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>spring-boot-starter-parent使我们项目的父pom。<br>spring-boot-starter-web提供嵌入式tomcat容器，从而使项目可以通过打成jar包的方式直接运行。<br>spring-boot-starter-data-jpa引入了jpa的支持。<br>spring-boot-test和junit配合做单元测试。<br>mysql-connector-java和HikariCP做数据库的连接池的操作。<br>spring-boot-maven-plugin插件能把项目和依赖的jar包以及资源文件和页面一起打成一个可运行的jar（运行在内嵌的tomcat）</p>
+<h4 id="启动人口"><a href="#启动人口" class="headerlink" title="启动人口"></a>启动人口</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> gxf.dev.topology;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.EnableAutoConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.web.servlet.ServletComponentScan;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableAutoConfiguration</span></span><br><span class="line"><span class="meta">@ServletComponentScan</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(Application.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里ServletComponentScan注解是启用servlet3的servler和filter以及listener的支持，下面会提到该用法。要注意的是：<strong>不能引入@EnableWebMvc注解</strong>，否则需要重新配置视图和资源文件映射。这样就不符合我们的前后端分离的初衷了。</p>
+<h3 id="静态资源处理"><a href="#静态资源处理" class="headerlink" title="静态资源处理"></a>静态资源处理</h3><p>spring-boot默认会去classpath下面的/static/，/public/ ，/resources/目录去读取静态资源。因此按照约定优先的原则，我们直接把我们应用的页面和资源文件直接放在/static下面，如下图所示：<br><img src="/upload/images/spring/spring-boot-dir.png" alt="img"><br>这样我们访问系统主页就会自动加载index.html，而且它所引用的资源文件也会在static/下开始加载。</p>
+<h3 id="application-yml"><a href="#application-yml" class="headerlink" title="application.yml"></a>application.yml</h3><p>我们在application配置文件中设置各种参数，它可以是传统的properties文件也可以使用yml来逐级配置。本文采用的第二种方式yml，如果不懂可以参考：<a href="https://baike.baidu.com/item/YAML/1067697?fr=aladdin" target="_blank" rel="external">https://baike.baidu.com/item/YAML/1067697?fr=aladdin</a>。其内容如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">    port: 8080</span><br><span class="line">    context-path: /topology</span><br><span class="line">    session:</span><br><span class="line">      timeout: 30</span><br><span class="line">    tomcat:</span><br><span class="line">      uri-encoding: utf-8</span><br><span class="line"></span><br><span class="line">logging:</span><br><span class="line">    level:</span><br><span class="line">        root: info</span><br><span class="line">        gxf.dev.topology: debug</span><br><span class="line">        #当配置了loggin.path属性时，将在该路径下生成spring.log文件，即：此时使用默认的日志文件名spring.log</span><br><span class="line">        #当配置了loggin.file属性时，将在指定路径下生成指定名称的日志文件。默认为项目相对路径，可以为logging.file指定绝对路径。</span><br><span class="line">        #path: /home/gongxufan/logs</span><br><span class="line">    file: topology.log</span><br><span class="line"></span><br><span class="line">spring:</span><br><span class="line">    jpa:</span><br><span class="line">      show-sql: true</span><br><span class="line">      open-in-view: false</span><br><span class="line">      hibernate:</span><br><span class="line">        naming:</span><br><span class="line">          #配置ddl建表字段和实体字段一致</span><br><span class="line">          physical-strategy: gxf.dev.topology.config.RealNamingStrategyImpl</span><br><span class="line">          ddl-auto: update</span><br><span class="line">      properties:</span><br><span class="line">        hibernate:</span><br><span class="line">          format_sql: true</span><br><span class="line">          show_sql: true</span><br><span class="line">          dialect: org.hibernate.dialect.MySQL5Dialect</span><br><span class="line">    datasource:</span><br><span class="line">        url: jdbc:mysql://localhost:3306/topology</span><br><span class="line">        driver-class-name: com.mysql.jdbc.Driver</span><br><span class="line">        username: root</span><br><span class="line">        password: qwe</span><br><span class="line">        hikari:</span><br><span class="line">              cachePrepStmts: true</span><br><span class="line">              prepStmtCacheSize: 250</span><br><span class="line">              prepStmtCacheSqlLimit: 2048</span><br><span class="line">              useServerPrepStmts: true</span><br></pre></td></tr></table></figure></p>
+<p>使用idea开发工具在编辑器会有自动变量提示，这样非常方便进行参数的选择和查阅。</p>
+<h4 id="server"><a href="#server" class="headerlink" title="server"></a>server</h4><p>server节点可以配置容器的很多参数，比如：端口，访问路径、还有tomcat本身的一些参数。这里设置了session的超时以及编码等。</p>
+<h4 id="logging"><a href="#logging" class="headerlink" title="logging"></a>logging</h4><p>日志级别可以定义到具体的哪个包路径，日志文件的配置要注意：path和file配置一个就行，file默认会在程序工作目录下生成，也可以置顶绝对路径进行指定。</p>
+<h4 id="datasource"><a href="#datasource" class="headerlink" title="datasource"></a>datasource</h4><p>这里使用号称性能最牛逼的连接池hikaricp，具体配置可以参阅其官网：<a href="http://brettwooldridge.github.io/HikariCP/" target="_blank" rel="external">http://brettwooldridge.github.io/HikariCP/</a></p>
+<h4 id="jpa"><a href="#jpa" class="headerlink" title="jpa"></a>jpa</h4><p>这里主要注意下strategy的配置，关系到自动建表时的字段命名规则。默认会生成带_划线分割entity的字段名(骆驼峰式)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> gxf.dev.topology.config;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * ddl-auto选项开启的时候生成表的字段命名策略，默认会按照骆驼峰式风格用_隔开每个单词</span></span><br><span class="line"><span class="comment"> * 这个类可以保证entity定义的字段名和数据表的字段一致</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@auth</span> gongxufan</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2016/8/3</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.hibernate.boot.model.naming.Identifier;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RealNamingStrategyImpl</span> <span class="keyword">extends</span> <span class="title">org</span>.<span class="title">springframework</span>.<span class="title">boot</span>.<span class="title">orm</span>.<span class="title">jpa</span>.<span class="title">hibernate</span>.<span class="title">SpringPhysicalNamingStrategy</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> PhysicalNamingStrategyStandardImpl INSTANCE = <span class="keyword">new</span> PhysicalNamingStrategyStandardImpl();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Identifier <span class="title">toPhysicalTableName</span><span class="params">(Identifier name, JdbcEnvironment context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Identifier(name.getText(), name.isQuoted());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Identifier <span class="title">toPhysicalColumnName</span><span class="params">(Identifier name, JdbcEnvironment context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Identifier(name.getText(), name.isQuoted());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="注册web组件"><a href="#注册web组件" class="headerlink" title="注册web组件"></a>注册web组件</h3><p>1) 最新的spring-boot引入新的注解ServletComponentScan，使用它可以方便的配置Servlet3+的web组件。主要有下面这三个注解：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@WebServlet</span></span><br><span class="line"><span class="meta">@WebFilter</span></span><br><span class="line"><span class="meta">@WebListener</span></span><br></pre></td></tr></table></figure></p>
+<p>只要把这些注解标记组件即可完成注册。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> gxf.dev.topology.filter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.core.annotation.Order;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.Filter;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.FilterChain;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.FilterConfig;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletResponse;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebFilter;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * author:gongxufan</span></span><br><span class="line"><span class="comment"> * date:11/14/17</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@Order</span>(<span class="number">1</span>)</span><br><span class="line"><span class="meta">@WebFilter</span>(filterName = <span class="string">"loginFilter"</span>, urlPatterns = <span class="string">"/login"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginFilter</span> <span class="keyword">implements</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(FilterConfig filterConfig)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest request, ServletResponse response, FilterChain chain)</span> <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"login rquest"</span>);</span><br><span class="line">        chain.doFilter(request,response);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> gxf.dev.topology.filter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebListener;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpSessionAttributeListener;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpSessionBindingEvent;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpSessionEvent;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpSessionListener;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义listener</span></span><br><span class="line"><span class="comment"> * Created by gongxufan on 2016/7/5.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@WebListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SessionListener</span> <span class="keyword">implements</span> <span class="title">HttpSessionListener</span>,<span class="title">HttpSessionAttributeListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sessionCreated</span><span class="params">(HttpSessionEvent httpSessionEvent)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"init"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sessionDestroyed</span><span class="params">(HttpSessionEvent httpSessionEvent)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"destroy"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">attributeAdded</span><span class="params">(HttpSessionBindingEvent se)</span> </span>&#123;</span><br><span class="line">        System.out.println(se.getName() + <span class="string">":"</span> + se.getValue());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">attributeRemoved</span><span class="params">(HttpSessionBindingEvent se)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">attributeReplaced</span><span class="params">(HttpSessionBindingEvent se)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2) 拦截器的使用<br>拦截器不是Servlet规范的标准组件，它跟上面的三个组件不在一个处理链上。拦截器是spring使用AOP实现的，对controller执行前后可以进行干预，直接结束请求处理。而且拦截器只能对流经dispatcherServlet处理的请求才生效，静态资源就不会被拦截。<br>下面顶一个拦截器：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> gxf.dev.topology.filter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.HandlerInterceptor;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.ModelAndView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * author:gongxufan</span></span><br><span class="line"><span class="comment"> * date:11/14/17</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginInterceptor</span> <span class="keyword">implements</span> <span class="title">HandlerInterceptor</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">preHandle</span><span class="params">(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"LoginInterceptor.preHandle()在请求处理之前进行调用（Controller方法调用之前）"</span>);</span><br><span class="line">        <span class="comment">// 只有返回true才会继续向下执行，返回false取消当前请求</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postHandle</span><span class="params">(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"LoginInterceptor.postHandle()请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterCompletion</span><span class="params">(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"LoginInterceptor.afterCompletion()在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>要想它生效则需要加入拦截器栈：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> gxf.dev.topology.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> gxf.dev.topology.filter.LoginInterceptor;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.config.annotation.InterceptorRegistry;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * author:gongxufan</span></span><br><span class="line"><span class="comment"> * date:11/14/17</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebMvcConfigurer</span> <span class="keyword">extends</span> <span class="title">WebMvcConfigurerAdapter</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addInterceptors</span><span class="params">(InterceptorRegistry registry)</span> </span>&#123;</span><br><span class="line">    	<span class="comment">//在这可以配置controller的访问路径</span></span><br><span class="line">        registry.addInterceptor(<span class="keyword">new</span> LoginInterceptor()).addPathPatterns(<span class="string">"/**"</span>);</span><br><span class="line">        <span class="keyword">super</span>.addInterceptors(registry);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="jpa操作"><a href="#jpa操作" class="headerlink" title="jpa操作"></a>jpa操作</h3><p>spring-boot已经集成了JPA的Repository封装，基于注解的事务处理等，我们只要按照常规的JPA使用方法即可。以Node表的操作为例：</p>
+<ol>
+<li>定义entity<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> gxf.dev.topology.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.annotation.JsonInclude;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.Entity;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Id;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Table;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by gongxufan on 2014/11/20.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"node"</span>)</span><br><span class="line"><span class="meta">@JsonInclude</span>(JsonInclude.Include.NON_NULL)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="keyword">private</span> String elementType;</span><br><span class="line">    <span class="keyword">private</span> String x;</span><br><span class="line">    <span class="keyword">private</span> String y;</span><br><span class="line">    <span class="keyword">private</span> String width;</span><br><span class="line">    <span class="keyword">private</span> String height;</span><br><span class="line">    <span class="keyword">private</span> String alpha;</span><br><span class="line">    <span class="keyword">private</span> String rotate;</span><br><span class="line">    <span class="keyword">private</span> String scaleX;</span><br><span class="line">    <span class="keyword">private</span> String scaleY;</span><br><span class="line">    <span class="keyword">private</span> String strokeColor;</span><br><span class="line">    <span class="keyword">private</span> String fillColor;</span><br><span class="line">    <span class="keyword">private</span> String shadowColor;</span><br><span class="line">    <span class="keyword">private</span> String shadowOffsetX;</span><br><span class="line">    <span class="keyword">private</span> String shadowOffsetY;</span><br><span class="line">    <span class="keyword">private</span> String zIndex;</span><br><span class="line">    <span class="keyword">private</span> String text;</span><br><span class="line">    <span class="keyword">private</span> String font;</span><br><span class="line">    <span class="keyword">private</span> String fontColor;</span><br><span class="line">    <span class="keyword">private</span> String textPosition;</span><br><span class="line">    <span class="keyword">private</span> String textOffsetX;</span><br><span class="line">    <span class="keyword">private</span> String textOffsetY;</span><br><span class="line">    <span class="keyword">private</span> String borderRadius;</span><br><span class="line">    <span class="keyword">private</span> String deviceId;</span><br><span class="line">    <span class="keyword">private</span> String dataType;</span><br><span class="line">    <span class="keyword">private</span> String borderColor;</span><br><span class="line">    <span class="keyword">private</span> String offsetGap;</span><br><span class="line">    <span class="keyword">private</span> String childNodes;</span><br><span class="line">    <span class="keyword">private</span> String nodeImage;</span><br><span class="line">    <span class="keyword">private</span> String templateId;</span><br><span class="line">    <span class="keyword">private</span> String deviceA;</span><br><span class="line">    <span class="keyword">private</span> String deviceZ;</span><br><span class="line">    <span class="keyword">private</span> String lineType;</span><br><span class="line">    <span class="keyword">private</span> String direction;</span><br><span class="line">    <span class="keyword">private</span> String vmInstanceId;</span><br><span class="line">    <span class="keyword">private</span> String displayName;</span><br><span class="line">    <span class="keyword">private</span> String vmid;</span><br><span class="line">    <span class="keyword">private</span> String topoLevel;</span><br><span class="line">    <span class="keyword">private</span> String parentLevel;</span><br><span class="line">    <span class="keyword">private</span> Setring nextLevel;</span><br><span class="line">    <span class="comment">//getter&amp;setter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>JsonInclude注解用于返回JOSN字符串是忽略为空的字段。</p>
+<ol>
+<li><p>编写repository接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> gxf.dev.topology.repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> gxf.dev.topology.entity.Node;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.repository.PagingAndSortingRepository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">NodeRepository</span> <span class="keyword">extends</span> <span class="title">PagingAndSortingRepository</span>&lt;<span class="title">Node</span>, <span class="title">String</span>&gt; </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写Service</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> gxf.dev.topology.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> gxf.dev.topology.entity.Node;</span><br><span class="line"><span class="keyword">import</span> gxf.dev.topology.repository.NodeRepository;</span><br><span class="line"><span class="keyword">import</span> gxf.dev.topology.repository.SceneRepository;</span><br><span class="line"><span class="keyword">import</span> gxf.dev.topology.repository.StageRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"><span class="keyword">import</span> org.springframework.transaction.annotation.Transactional;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * dao操作</span></span><br><span class="line"><span class="comment"> * author:gongxufan</span></span><br><span class="line"><span class="comment"> * date:11/13/17</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TopologyService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> NodeRepository nodeRepository;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> SceneRepository sceneRepository;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> StageRepository stageRepository;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Transactional</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node <span class="title">saveNode</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> nodeRepository.save(node);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Iterable&lt;Node&gt; <span class="title">getAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> nodeRepository.findAll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h3><p>单元测试使用spring-boot-test和junit进行，需要用到下面的几个注解：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringRunner.class)</span><br><span class="line"><span class="meta">@SpringBootTest</span>(classes = Application.class)</span><br></pre></td></tr></table></figure></p>
+<p>测试代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gxf.dev.topology.Application;</span><br><span class="line"><span class="keyword">import</span> gxf.dev.topology.entity.Node;</span><br><span class="line"><span class="keyword">import</span> gxf.dev.topology.repository.CustomSqlDao;</span><br><span class="line"><span class="keyword">import</span> gxf.dev.topology.service.TopologyService;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.RunWith;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.test.context.SpringBootTest;</span><br><span class="line"><span class="keyword">import</span> org.springframework.test.context.junit4.SpringRunner;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * author:gongxufan</span></span><br><span class="line"><span class="comment"> * date:11/13/17</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@RunWith</span>(SpringRunner.class)</span><br><span class="line"><span class="meta">@SpringBootTest</span>(classes = Application.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TopologyService topologyService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CustomSqlDao customSqlDao;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Node node = <span class="keyword">new</span> Node();</span><br><span class="line">        node.setId(<span class="string">"node:2"</span>);</span><br><span class="line">        node.setDisplayName(<span class="string">"test1"</span>);</span><br><span class="line">        topologyService.saveNode(node);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testNative</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(customSqlDao.querySqlObjects(<span class="string">"select * from node"</span>));</span><br><span class="line">        System.out.println(customSqlDao.getMaxColumn(<span class="string">"id"</span>,<span class="string">"node"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="jpa补充"><a href="#jpa补充" class="headerlink" title="jpa补充"></a>jpa补充</h3><p>使用JPA进行单表操作确实很方便，但是对于多表连接的复杂查询可能不太方便。一般有两种方式弥补这个不足：</p>
+<ol>
+<li>一个是在Query里标注为NativeQuery，直接使用原生SQL。不过这种方式在动态参数查询到额情况下很不方便，这时候我们需要按条件拼接SQL。</li>
+<li>自定义DAO<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> gxf.dev.topology.repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.mysql.jdbc.StringUtils;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.SQLQuery;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.criterion.CriteriaSpecification;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.EntityManager;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.EntityManagerFactory;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Query;</span><br><span class="line"><span class="keyword">import</span> java.math.BigDecimal;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Matcher;</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 支持自定义SQL查询</span></span><br><span class="line"><span class="comment"> * Created by gongxufan on 2016/3/17.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomSqlDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> EntityManagerFactory entityManagerFactory;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getMaxColumn</span><span class="params">(<span class="keyword">final</span> String filedName, <span class="keyword">final</span> String tableName)</span> </span>&#123;</span><br><span class="line">        String sql = <span class="string">"select nvl(max("</span> + filedName + <span class="string">"), 0)  as max_num from "</span> + tableName;</span><br><span class="line">        Map map =  entityManagerFactory.getProperties();</span><br><span class="line">        String dialect = (String) map.get(<span class="string">"hibernate.dialect"</span>);</span><br><span class="line">        <span class="comment">//determine which database use</span></span><br><span class="line">        <span class="keyword">if</span>(!StringUtils.isNullOrEmpty(dialect))&#123;</span><br><span class="line">            <span class="keyword">if</span>(dialect.contains(<span class="string">"MySQL"</span>))&#123;</span><br><span class="line">                sql = <span class="string">"select ifnull(max("</span> + filedName + <span class="string">"), 0)  as max_num from "</span> + tableName;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(dialect.contains(<span class="string">"Oracle"</span>))&#123;</span><br><span class="line">                sql = <span class="string">"select nvl(max("</span> + filedName + <span class="string">"), 0)  as max_num from "</span> + tableName;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> maxID = <span class="number">0</span>;</span><br><span class="line">        List&lt;Map&lt;String, Object&gt;&gt; list = <span class="keyword">this</span>.querySqlObjects(sql);</span><br><span class="line">        <span class="keyword">if</span> (list.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            Object maxNum = list.get(<span class="number">0</span>).get(<span class="string">"max_num"</span>);</span><br><span class="line">            <span class="keyword">if</span>(maxNum <span class="keyword">instanceof</span> Number)</span><br><span class="line">                maxID = ((Number)maxNum).intValue();</span><br><span class="line">            <span class="keyword">if</span>(maxNum <span class="keyword">instanceof</span> String)</span><br><span class="line">                maxID = Integer.valueOf((String)maxNum);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxID + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;Map&lt;String, Object&gt;&gt; querySqlObjects(String sql, Integer currentPage, Integer rowsInPage) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.querySqlObjects(sql, <span class="keyword">null</span>, currentPage, rowsInPage);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;Map&lt;String, Object&gt;&gt; querySqlObjects(String sql) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.querySqlObjects(sql, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;Map&lt;String, Object&gt;&gt; querySqlObjects(String sql, Map params) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.querySqlObjects(sql, params, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    <span class="keyword">public</span> List&lt;Map&lt;String, Object&gt;&gt; querySqlObjects(String sql, Object params, Integer currentPage, Integer rowsInPage) &#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        Query qry = entityManager.createNativeQuery(sql);</span><br><span class="line">        SQLQuery s = qry.unwrap(SQLQuery.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置参数</span></span><br><span class="line">        <span class="keyword">if</span> (params != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (params <span class="keyword">instanceof</span> List) &#123;</span><br><span class="line">                List&lt;Object&gt; paramList = (List&lt;Object&gt;) params;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, size = paramList.size(); i &lt; size; i++) &#123;</span><br><span class="line">                    qry.setParameter(i + <span class="number">1</span>, paramList.get(i));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (params <span class="keyword">instanceof</span> Map) &#123;</span><br><span class="line">                Map&lt;String, Object&gt; paramMap = (Map&lt;String, Object&gt;) params;</span><br><span class="line">                Object o = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">for</span> (String key : paramMap.keySet()) &#123;</span><br><span class="line">                    o = paramMap.get(key);</span><br><span class="line">                    <span class="keyword">if</span> (o != <span class="keyword">null</span>)</span><br><span class="line">                        qry.setParameter(key, o);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (currentPage != <span class="keyword">null</span> &amp;&amp; rowsInPage != <span class="keyword">null</span>) &#123;<span class="comment">//判断是否有分页</span></span><br><span class="line">            <span class="comment">// 起始对象位置</span></span><br><span class="line">            qry.setFirstResult(rowsInPage * (currentPage - <span class="number">1</span>));</span><br><span class="line">            <span class="comment">// 查询对象个数</span></span><br><span class="line">            qry.setMaxResults(rowsInPage);</span><br><span class="line">        &#125;</span><br><span class="line">        s.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);</span><br><span class="line">        List&lt;Map&lt;String, Object&gt;&gt; resultList = <span class="keyword">new</span> ArrayList&lt;Map&lt;String, Object&gt;&gt;();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            List list = qry.getResultList();</span><br><span class="line">            resultList = s.list();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            entityManager.close();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> resultList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">(String sql)</span> </span>&#123;</span><br><span class="line">        String sqlCount = <span class="string">"select count(0) as count_num from "</span> + sql;</span><br><span class="line">        List&lt;Map&lt;String, Object&gt;&gt; list = <span class="keyword">this</span>.querySqlObjects(sqlCount);</span><br><span class="line">        <span class="keyword">if</span> (list.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> countNum = ((BigDecimal) list.get(<span class="number">0</span>).get(<span class="string">"COUNT_NUM"</span>)).intValue();</span><br><span class="line">            <span class="keyword">return</span> countNum;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理sql语句</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> _strSql</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toSql</span><span class="params">(String _strSql)</span> </span>&#123;</span><br><span class="line">        String strNewSql = _strSql;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (strNewSql != <span class="keyword">null</span>) &#123;</span><br><span class="line">            strNewSql = regReplace(<span class="string">"'"</span>, <span class="string">"''"</span>, strNewSql);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            strNewSql = <span class="string">""</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> strNewSql;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">regReplace</span><span class="params">(String strFind, String strReplacement, String strOld)</span> </span>&#123;</span><br><span class="line">        String strNew = strOld;</span><br><span class="line">        Pattern p = <span class="keyword">null</span>;</span><br><span class="line">        Matcher m = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            p = Pattern.compile(strFind);</span><br><span class="line">            m = p.matcher(strOld);</span><br><span class="line">            strNew = m.replaceAll(strReplacement);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> strNew;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据hql语句查询数据</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> hql</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"rawtypes"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">queryForList</span><span class="params">(String hql, List&lt;Object&gt; params)</span> </span>&#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        Query query = entityManager.createQuery(hql);</span><br><span class="line">        List list = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (params != <span class="keyword">null</span> &amp;&amp; !params.isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, size = params.size(); i &lt; size; i++) &#123;</span><br><span class="line">                    query.setParameter(i + <span class="number">1</span>, params.get(i));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            list = query.getResultList();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            entityManager.close();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"rawtypes"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">queryByMapParams</span><span class="params">(String hql, Map&lt;String, Object&gt; params, Integer currentPage, Integer pageSize)</span> </span>&#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        Query query = entityManager.createQuery(hql);</span><br><span class="line">        List list = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (params != <span class="keyword">null</span> &amp;&amp; !params.isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; entry : params.entrySet()) &#123;</span><br><span class="line">                    query.setParameter(entry.getKey(), entry.getValue());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (currentPage != <span class="keyword">null</span> &amp;&amp; pageSize != <span class="keyword">null</span>) &#123;</span><br><span class="line">                query.setFirstResult((currentPage - <span class="number">1</span>) * pageSize);</span><br><span class="line">                query.setMaxResults(pageSize);</span><br><span class="line">            &#125;</span><br><span class="line">            list = query.getResultList();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            entityManager.close();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"rawtypes"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">queryByMapParams</span><span class="params">(String hql, Map&lt;String, Object&gt; params)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> queryByMapParams(hql, params, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"rawtypes"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List <span class="title">queryForList</span><span class="params">(String hql)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> queryForList(hql, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询总数</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> hql</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> params</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">queryCount</span><span class="params">(String hql, Map&lt;String, Object&gt; params)</span> </span>&#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        Query query = entityManager.createQuery(hql);</span><br><span class="line">        Long count = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (params != <span class="keyword">null</span> &amp;&amp; !params.isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; entry : params.entrySet()) &#123;</span><br><span class="line">                    query.setParameter(entry.getKey(), entry.getValue());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            count = (Long) query.getSingleResult();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            entityManager.close();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询总数</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> sql</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> params</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">queryCountBySql</span><span class="params">(String sql, Map&lt;String, Object&gt; params)</span> </span>&#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        Integer count = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Query query = entityManager.createNativeQuery(sql);</span><br><span class="line">            <span class="keyword">if</span> (params != <span class="keyword">null</span> &amp;&amp; !params.isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; entry : params.entrySet()) &#123;</span><br><span class="line">                    query.setParameter(entry.getKey(), entry.getValue());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Object obj = query.getSingleResult();</span><br><span class="line">            <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> BigDecimal) &#123;</span><br><span class="line">                count = ((BigDecimal) obj).intValue();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                count = (Integer) obj;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (entityManager != <span class="keyword">null</span>) &#123;</span><br><span class="line">                entityManager.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * select count(*) from table</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> sql</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> params</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">executeSql</span><span class="params">(String sql, List&lt;Object&gt; params)</span> </span>&#123;</span><br><span class="line">        EntityManager entityManager = entityManagerFactory.createEntityManager();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Query query = entityManager.createNativeQuery(sql);</span><br><span class="line">            <span class="keyword">if</span> (params != <span class="keyword">null</span> &amp;&amp; !params.isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, size = params.size(); i &lt; size; i++) &#123;</span><br><span class="line">                    query.setParameter(i + <span class="number">1</span>, params.get(i));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> query.executeUpdate();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (entityManager != <span class="keyword">null</span>) &#123;</span><br><span class="line">                entityManager.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>我们在service层注入，然后就可以根据输入条件拼接好sql或者hql来进行各种操作。这种方式灵活而且也不需要手动写分页代码，使用hibernate封装好的机制即可。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用boot可以快速搭建一个前后端开发的骨架，里面有很多自动的配置和约定。虽然boot不是新的一个技术栈，但是它要求我们对各个组件都要比较熟悉，不然对它的运行机制和约定配置会感到很困惑。而使用JPA进行数据库操作也是利弊参半，需要自己权衡。</p>
+<p>项目代码：<a href="https://github.com/gongxufan/topology" target="_blank" rel="external">https://github.com/gongxufan/topology</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创，看官随意。</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/upload/images/wechatpay.jpeg" alt="gongxufan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/upload/images/alipay.jpeg" alt="gongxufan 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    gongxufan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://gongxufan.github.io/2016/11/14/spring-boot-data-jpa-project/" title="基于spring-boot&spring-data-jpa的web开发环境集成">https://gongxufan.github.io/2016/11/14/spring-boot-data-jpa-project/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/14/jdbc-sid-serviceName/" rel="next" title="JDBC无法连接Oracle问题解决">
+                <i class="fa fa-chevron-left"></i> JDBC无法连接Oracle问题解决
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/25/angular-admin-ui/" rel="prev" title="使用Angular搭建后台管理系统界面">
+                使用Angular搭建后台管理系统界面 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div style="margin-top: 20px;text-align: center;">
+      
+        <!--MOB SHARE BEGIN-->
+<div class="-mob-share-ui-button -mob-share-open">分享本文</div>
+<div class="-mob-share-ui" style="display: none">
+    <ul class="-mob-share-list">
+        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+                                                <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+                                                <li class="-mob-share-qzone"><p>QQ空间</p></li>
+                                                <li class="-mob-share-qq"><p>QQ好友</p></li>
+                                                <li class="-mob-share-weixin"><p>微信</p></li>
+                                                <li class="-mob-share-douban"><p>豆瓣</p></li>
+                                                <li class="-mob-share-renren"><p>人人网</p></li>
+                                                <li class="-mob-share-kaixin"><p>开心网</p></li>
+                                                <li class="-mob-share-facebook"><p>Facebook</p></li>
+                                                <li class="-mob-share-twitter"><p>Twitter</p></li>
+                                                <li class="-mob-share-pocket"><p>Pocket</p></li>
+                                                <li class="-mob-share-google"><p>Google+</p></li>
+                                                <li class="-mob-share-youdao"><p>有道云笔记</p></li>
+                                                <li class="-mob-share-mingdao"><p>明道</p></li>
+                                                <li class="-mob-share-pengyou"><p>朋友网</p></li>
+                                                <li class="-mob-share-tumblr"><p>Tumblr</p></li>
+                                                <li class="-mob-share-instapaper"><p>Instapaper</p></li>
+                                                <li class="-mob-share-linkedin"><p>LinkedIn</p></li>
+    </ul>
+    <div class="-mob-share-close">取消</div>
+</div>
+<div class="-mob-share-ui-bg"></div>
+<script id="-mob-share" src="https://f1.webshare.mob.com/code/mob-share.js?appkey=你的appkey"></script>
+<!--MOB SHARE END-->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://www.intensedebate.com?ref_noscript">comments powered by intensedebate.</a>
+        </noscript>
+        <script>
+              var idcomments_acct = '5f980fb685d9eca708e4ec93983b3255';
+              var idcomments_post_id;
+              var idcomments_post_url;
+          </script>
+          <span id="IDCommentsPostTitle" style="display:none"></span>
+          <script type='text/javascript' src='https://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+      </div>
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/upload/avator.jpg"
+                alt="gongxufan" />
+            
+              <p class="site-author-name" itemprop="name">gongxufan</p>
+              <p class="site-description motion-element" itemprop="description">平凡而执着，简单而快乐。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://hexo.io/" title="hexo" target="_blank">hexo</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/" title="github" target="_blank">github</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://stackoverflow.com/" title="stackoverflow" target="_blank">stackoverflow</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://code.activestate.com" title="ActiveState" target="_blank">ActiveState</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#新技术？"><span class="nav-number">1.</span> <span class="nav-text">新技术？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板or静态页面"><span class="nav-number">2.</span> <span class="nav-text">模板or静态页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目搭建"><span class="nav-number">3.</span> <span class="nav-text">项目搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目结构"><span class="nav-number">3.1.</span> <span class="nav-text">项目结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pom-xml"><span class="nav-number">3.1.1.</span> <span class="nav-text">pom.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动人口"><span class="nav-number">3.1.2.</span> <span class="nav-text">启动人口</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态资源处理"><span class="nav-number">3.2.</span> <span class="nav-text">静态资源处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#application-yml"><span class="nav-number">3.3.</span> <span class="nav-text">application.yml</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#server"><span class="nav-number">3.3.1.</span> <span class="nav-text">server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#logging"><span class="nav-number">3.3.2.</span> <span class="nav-text">logging</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#datasource"><span class="nav-number">3.3.3.</span> <span class="nav-text">datasource</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jpa"><span class="nav-number">3.3.4.</span> <span class="nav-text">jpa</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册web组件"><span class="nav-number">3.4.</span> <span class="nav-text">注册web组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jpa操作"><span class="nav-number">3.5.</span> <span class="nav-text">jpa操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单元测试"><span class="nav-number">3.6.</span> <span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jpa补充"><span class="nav-number">3.7.</span> <span class="nav-text">jpa补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">gongxufan</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">42.0k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('5');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("7Do3qJ6mAHsHtIzkulIOEglT-gzGzoHsz", "yCDRrJqGuDMB81YS6w0x7ugP");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+</body>
+</html>
